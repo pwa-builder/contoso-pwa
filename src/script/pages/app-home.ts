@@ -124,8 +124,6 @@ export class AppHome extends LitElement {
             </div>
           </fast-card>
         </aside>
-
-        <img src="/assets/mainMap.png" alt="Image of a map of Washington State">
       </div>
     `;
   }
