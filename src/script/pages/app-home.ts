@@ -12,24 +12,10 @@ export class AppHome extends LitElement {
 
   static get styles() {
     return css`
-      #welcomeBlock {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-      }
-
-      #welcomeBlock h2 {
-        margin-bottom: 0;
-      }
-
-      #welcomeBlock p {
-        max-width: 22em;
-      }
-
-      #welcomeBlock img {
-        width: 6em;
+      fast-card {
+        padding: 18px;
+        padding-top: 0px;
+        margin-top: 10px;
       }
 
       pwa-install {
@@ -38,15 +24,22 @@ export class AppHome extends LitElement {
         right: 16px;
       }
 
-      button {
-        cursor: pointer;
+      aside {
+        position: fixed;
+        top: 5em;
+        left: 1em;
+        z-index: 9;
       }
 
-      @media(spanning: single-fold-vertical) {
-        #welcomeBlock {
-          width: 50%;
-        }
+      img {
+        position: fixed;
+        top: 4em;
+        left: 0em;
+        right: 0em;
+        z-index: 0;
+        object-fit: contain;
       }
+
     `;
   }
 
@@ -73,22 +66,24 @@ export class AppHome extends LitElement {
   render() {
     return html`
       <div>
+        <aside>
+          <fast-card>
+            <h2>Hello Megan!</h2>
+      
+            <p>You have 2 new emergency requests today!</p>
+          </fast-card>
+      
+          <fast-card>
+            <h2>Filter Status</h2>
 
-        <div id="welcomeBlock">
+            <div id="gridFilter">
+              <button>Needs Attention</button>
+              <button>Team Assigned</button>
+            </div>
+          </fast-card>
+        </aside>
 
-          <img src="assets/icons/icon_512.png" alt="app icon">
-          <h2>${this.message}</h2>
-
-          <p>
-            Welcome to the <a href="https://pwabuilder.com">PWABuilder</a> pwa-starter!
-
-            Be sure to head back to <a href="https://pwabuilder.com">PWABuilder</a> when you are ready to ship this PWA to the Microsoft, Google Play and Samsung Galaxy stores!
-          </p>
-
-          ${'share' in navigator ? html`<button @click="${this.share}">Share this Starter!</button>` : null}
-        </div>
-
-        <pwa-install>Install PWA Starter</pwa-install>
+        <img src="/assets/mainMap.png" alt="Image of a map of Washington State">
       </div>
     `;
   }

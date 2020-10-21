@@ -4,7 +4,7 @@ import { LitElement, css, html, customElement, property } from 'lit-element';
 @customElement('app-header')
 export class AppHeader extends LitElement {
 
-  @property({ type: String }) title: string = 'PWA Starter';
+  @property({ type: String }) title: string = 'Contoso Emergency Response';
 
   static get styles() {
     return css`
@@ -15,7 +15,7 @@ export class AppHeader extends LitElement {
         padding-left: 16px;
         padding-right: 16px;
         background: var(--app-color-primary);
-        color: white;
+        color: black;
         height: 4em;
       }
 
@@ -47,12 +47,13 @@ export class AppHeader extends LitElement {
   render() {
     return html`
       <header>
+        <div>
+        </div>
+
         <h1>${this.title}</h1>
 
-        <nav>
-          <a href="./">Home</a>
-          <a href="./about">About</a>
-        </nav>
+        <div>
+        </div>
       </header>
     `;
   }
