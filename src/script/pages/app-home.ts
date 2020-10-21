@@ -40,6 +40,30 @@ export class AppHome extends LitElement {
         object-fit: contain;
       }
 
+      .gridFilter {
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-gap: 10px;
+      }
+
+      #alerts {
+        list-style: none;
+        padding: 0;
+        color: red;
+        font-weight: bold;
+      }
+
+      #alerts li, #alerts fast-anchor::part(control) {
+        border: solid 1px;
+        padding: 8px;
+        margin-top: 10px;
+        color: red;
+      }
+
+      #alerts fast-anchor {
+        width: 100%;
+      }
+
     `;
   }
 
@@ -71,14 +95,32 @@ export class AppHome extends LitElement {
             <h2>Hello Megan!</h2>
       
             <p>You have 2 new emergency requests today!</p>
+
+            <ul id="alerts">
+              <li>Okanogon has a Wildfire</li>
+              <li>Lake Chelan has a Wildfire</li>
+              <fast-anchor appearance="hypertext" href="/about">Forks has a Wildfire</fast-anchor>
+            </ul>
           </fast-card>
       
           <fast-card>
-            <h2>Filter Status</h2>
+            <h2>Filter by Status</h2>
 
-            <div id="gridFilter">
+            <div class="gridFilter">
               <button>Needs Attention</button>
               <button>Team Assigned</button>
+              <button>Team Deployed</button>
+              <button>Cleanup</button>
+              <button>Done</button>
+            </div>
+
+            <h2>Filter By Emergency</h2>
+
+            <div class="gridFilter">
+              <button>Wildfire</button>
+              <button>Tsunami</button>
+              <button>EarthQuake</button>
+              <button>Tornado</button>
             </div>
           </fast-card>
         </aside>

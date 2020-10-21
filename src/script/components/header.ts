@@ -26,6 +26,10 @@ export class AppHeader extends LitElement {
         font-weight: normal;
       }
 
+      .headerDiv {
+        width: 110px;
+      }
+
       nav {
         width: 7em;
         display: flex;
@@ -47,12 +51,13 @@ export class AppHeader extends LitElement {
   render() {
     return html`
       <header>
-        <div>
+        <div class="headerDiv">
         </div>
 
         <h1>${this.title}</h1>
 
-        <div>
+        <div class="headerDiv">
+          <mgt-login></mgt-login>
         </div>
       </header>
     `;
