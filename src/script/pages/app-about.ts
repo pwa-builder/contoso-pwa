@@ -1,12 +1,10 @@
 import { LitElement, css, html, customElement } from 'lit-element';
 
-
 @customElement('app-about')
 export class AppAbout extends LitElement {
-
   static get styles() {
     return css`
-    fast-card {
+      fast-card {
         padding: 18px;
         padding-top: 0px;
         margin-top: 10px;
@@ -14,15 +12,15 @@ export class AppAbout extends LitElement {
         background: #212121de;
         backdrop-filter: blur(8px);
       }
-      
+
       img {
-          position: fixed;
-          top: 4em;
-          left: 0em;
-          right: 0em;
-          z-index: -1;
-          object-fit: contain;
-        }
+        position: fixed;
+        top: 4em;
+        left: 0em;
+        right: 0em;
+        z-index: -1;
+        object-fit: contain;
+      }
 
       #aboutCards {
         display: flex;
@@ -111,43 +109,43 @@ export class AppAbout extends LitElement {
         <div id="aboutCards">
           <fast-card id="feedCard">
             <h2>Feed</h2>
-      
-            <textarea></textarea>
-      
+
+            <mgt-people-mention></mgt-people-mention>
+
             <ul>
               <fast-card>
                 <h3>John Firefighter</h3>
-      
-                <p>I am fighting this fire, looks like we are making progress!</p>
+
+                <p>
+                  I am fighting this fire, looks like we are making progress!
+                </p>
               </fast-card>
-      
-              <fast-card>
-      
-              </fast-card>
+
+              <fast-card> </fast-card>
             </ul>
           </fast-card>
-      
+
           <fast-card id="infoCard">
             <h2>Information:</h2>
-      
+
             <form>
               <section id="leftSection">
                 <div class="formBlock">
                   <label for="leadInput">Lead</label>
-                  <input id="leadInput" name="leadInput" type="text">
+                  <input id="leadInput" name="leadInput" type="text" />
                 </div>
-      
+
                 <div class="formBlock">
                   <label for="assignedInput">Assigned To</label>
-                  <input id="assignedInput" name="assignedInput" type="text">
+                  <input id="assignedInput" name="assignedInput" type="text" />
                 </div>
-      
+
                 <div class="formBlock">
                   <label for="descInput">Description</label>
                   <textarea id="descInput" name="descInput"></textarea>
                 </div>
               </section>
-      
+
               <section id="rightSection">
                 <div class="formBlock">
                   <label for="stateInput">State</label>
@@ -155,17 +153,19 @@ export class AppAbout extends LitElement {
                     <option>Team Assigned</option>
                   </select>
                 </div>
-      
+
                 <div class="formBlock">
                   <label for="areaInput">Affected Area</label>
-                  <input id="areaInput" name="areaInput" type="text">
+                  <input id="areaInput" name="areaInput" type="text" />
                 </div>
-      
+
                 <div class="formBlock">
-                  <label for="estNumber">Estimated Number of Affected People</label>
-                  <input id="estNumber" name="estNumber" type="number">
+                  <label for="estNumber"
+                    >Estimated Number of Affected People</label
+                  >
+                  <input id="estNumber" name="estNumber" type="number" />
                 </div>
-      
+
                 <div class="formBlock">
                   <label for="severityInput">Severity</label>
                   <select id="severityInput" name="severityInput">
@@ -173,9 +173,8 @@ export class AppAbout extends LitElement {
                   </select>
                 </div>
               </section>
-      
             </form>
-      
+
             <div id="actionsBar">
               <fast-button>Share</fast-button>
               <fast-button>Save</fast-button>
@@ -183,7 +182,6 @@ export class AppAbout extends LitElement {
             </div>
           </fast-card>
         </div>
-      
       </div>
     `;
   }
