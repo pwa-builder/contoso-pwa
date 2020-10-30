@@ -118,9 +118,9 @@ export class MgtPeopleMention extends MgtPeoplePicker {
     }
   }
 
-  protected renderFlyout(anchor: TemplateResult): TemplateResult {
+  protected renderFlyoutSure(anchor: TemplateResult): TemplateResult {
     return html`
-      <mgt-flyout light-dismiss class="flyout">
+      <mgt-flyout-modified light-dismiss class="flyout">
         ${anchor}
         <div
           slot="flyout"
@@ -130,7 +130,7 @@ export class MgtPeopleMention extends MgtPeoplePicker {
         >
           <div class="flyout-root">${this.renderFlyoutContent()}</div>
         </div>
-      </mgt-flyout>
+      </mgt-flyout-modified>
     `;
   }
 
@@ -181,7 +181,8 @@ export class MgtPeopleMention extends MgtPeoplePicker {
       style="width: 500px; padding: 10px"
       placeholder="Start typing a name"
     ></div>`;
-    const flyoutTemplate = this.renderFlyout(inputTemplate);
+    console.log('HELLOOOOOO');
+    const flyoutTemplate = this.renderFlyoutSure(inputTemplate);
     console.log('Flyout template', flyoutTemplate);
     return html`
       <div class=${classMap(inputClasses)}>
@@ -198,7 +199,7 @@ export class MgtPeopleMention extends MgtPeoplePicker {
       'people-person-job-title': true,
       uppercase: !!user.jobTitle,
     };
-    console.log('Inside render person Result');
+    console.log('Inside renderHWLLOOOO');
     return (
       this.renderTemplate('person', { person }, person.id) ||
       html`

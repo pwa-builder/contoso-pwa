@@ -7,6 +7,7 @@ import { Router } from '@vaadin/router';
 import '../components/header';
 
 import '../components/mentions/mgt-people-mentions';
+import '../components/mentions/mgt-flyout-modified';
 import { MsalProvider, Providers } from '@microsoft/mgt';
 
 @customElement('app-index')
