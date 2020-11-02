@@ -82,17 +82,12 @@ export class AppAbout extends LitElement {
 
       #infoCard form {
         display: flex;
-        justify-content: start;
-      }
-
-      .formBlock {
-        display: flex;
         flex-direction: column;
-        margin-bottom: 16px;
       }
 
-      #leftSection {
-        margin-right: 4em;
+      section.main {
+        display: flex;
+        justify-content: space-around;
       }
 
       textarea {
@@ -110,10 +105,7 @@ export class AppAbout extends LitElement {
       <div>
         <div id="aboutCards">
           <fast-card id="feedCard">
-            <h2>Feed</h2>
-      
-            <textarea></textarea>
-      
+            <h2>Feed</h2>      
             <ul>
               <fast-card>
                 <h3>John Firefighter</h3>
@@ -131,55 +123,94 @@ export class AppAbout extends LitElement {
             <h2>Information:</h2>
       
             <form>
-              <section id="leftSection">
-                <div class="formBlock">
-                  <label for="leadInput">Lead</label>
-                  <input id="leadInput" name="leadInput" type="text">
-                </div>
-      
-                <div class="formBlock">
-                  <label for="assignedInput">Assigned To</label>
-                  <input id="assignedInput" name="assignedInput" type="text">
-                </div>
-      
-                <div class="formBlock">
-                  <label for="descInput">Description</label>
-                  <textarea id="descInput" name="descInput"></textarea>
+              <section class="status-bar">
+                <div>
+                  <span>Needs attention</span>
+                  <span>Team assigned</span>
+                  <span>Team deployed</span>
+                  <span>Cleanup</span>
+                  <span>Done</span>
                 </div>
               </section>
       
-              <section id="rightSection">
-                <div class="formBlock">
-                  <label for="stateInput">State</label>
-                  <select id="stateInput" name="stateInput">
-                    <option>Team Assigned</option>
-                  </select>
+              <section class="main">
+                <div class="column">
+                  <p>
+                    <label for="status">
+                      <span>Status: </span>
+                    </label>
+                    <p>
+                      <select id="status" name="status">
+                        <option value="needs-attention">Needs attention</option>
+                        <option value="team-assigned">Team assigned</option>
+                        <option value="team-deployed">Team deployed</option>
+                        <option value="cleanup">Cleanup</option>
+                        <option value="done">Done</option>
+                      </select>
+                    </p>
+                  </p>
+                  <p>
+                    <label for="lead">
+                      <span>Lead: </span>
+                    </label>
+                    <p>
+                      <mgt-people-picker name="lead"></mgt-people-picker>
+                    </p>
+                  </p>
+                  <p>
+                    <label for="severity">
+                      <span>Severity: </span>
+                    </label>
+                    <p>
+                      <select name="severity">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                      </select>
+                    </p>
+                  </p>
+                  <p>
+                    <label for="description">
+                      <span>Description: </span>
+                    </label>
+                    <p>
+                      <fast-text-area name="desciption" rows="10" cols="30"></fast-text-area>
+                    </p>
+                  </p>
                 </div>
-      
-                <div class="formBlock">
-                  <label for="areaInput">Affected Area</label>
-                  <input id="areaInput" name="areaInput" type="text">
-                </div>
-      
-                <div class="formBlock">
-                  <label for="estNumber">Estimated Number of Affected People</label>
-                  <input id="estNumber" name="estNumber" type="number">
-                </div>
-      
-                <div class="formBlock">
-                  <label for="severityInput">Severity</label>
-                  <select id="severityInput" name="severityInput">
-                    <option>High</option>
-                  </select>
+                <div class="column">
+                  <p>
+                    <label for="assigned-to">
+                      <span>Assigned To: </span>
+                    </label>
+                    <p>
+                      <mgt-people-picker name="assigned-to"></mgt-people-picker>
+                    </p>
+                  </p>
+                  <p>
+                    <label for="teams">
+                      <span>Send updates to Teams channel: </span>
+                    </label>
+                    <p>
+                      <mgt-teams-channel-picker name="teams"></mgt-teams-channel-picker>
+                    </p>
+                  </p>
+                  <p>
+                    <label for="comment">
+                      <span>Comment: </span>
+                    </label>
+                    <p>
+                      <fast-text-area name="comment" rows="10" cols="30"></fast-text-area>
+                    </p>
+                  </p>
                 </div>
               </section>
       
             </form>
       
-            <div id="actionsBar">
-              <fast-button>Share</fast-button>
+            <div class="cta">
+              <fast-button>cancel</fast-button>
               <fast-button>Save</fast-button>
-              <fast-button>Subscribe</fast-button>
             </div>
           </fast-card>
         </div>
