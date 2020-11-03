@@ -5,17 +5,20 @@ import './app-home';
 import { Router } from '@vaadin/router';
 
 import '../components/header';
+import { Providers, MsalProvider } from '@microsoft/mgt';
 
+Providers.globalProvider = new MsalProvider({
+  clientId: 'a974dfa0-9f57-49b9-95db-90f04ce2111a',
+});
 
 @customElement('app-index')
 export class AppIndex extends LitElement {
-
   static get styles() {
     return css`
       main {
         padding: 16px;
         height: 88vh;
-        background-image: url("/assets/mainMap.png");
+        background-image: url('/assets/mainMap.png');
       }
 
       #routerOutlet > * {
@@ -25,26 +28,26 @@ export class AppIndex extends LitElement {
       #routerOutlet > .leaving {
         animation: 160ms fadeOut ease-in-out;
       }
-    
+
       #routerOutlet > .entering {
         animation: 160ms fadeIn linear;
       }
-    
+
       @keyframes fadeOut {
         from {
           opacity: 1;
         }
-    
+
         to {
           opacity: 0;
         }
       }
-    
+
       @keyframes fadeIn {
         from {
           opacity: 0.2;
         }
-    
+
         to {
           opacity: 1;
         }
@@ -63,21 +66,21 @@ export class AppIndex extends LitElement {
     // For more info on using the @vaadin/router check here https://vaadin.com/router
     const router = new Router(this.shadowRoot?.querySelector('#routerOutlet'));
     router.setRoutes([
-    // temporarily cast to any because of a Type bug with the router
-      ({
-        path: "",
+      // temporarily cast to any because of a Type bug with the router
+      {
+        path: '',
         animate: true,
         children: [
           { path: '/', component: 'app-home' },
           {
-            path: "/about",
-            component: "app-about",
+            path: '/about',
+            component: 'app-about',
             action: async () => {
               await import('./app-about.js');
             },
-          }
-        ]
-      } as any)
+          },
+        ],
+      } as any,
     ]);
   }
 

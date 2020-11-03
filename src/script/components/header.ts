@@ -1,9 +1,7 @@
 import { LitElement, css, html, customElement, property } from 'lit-element';
 
-
 @customElement('app-header')
 export class AppHeader extends LitElement {
-
   @property({ type: String }) title: string = 'Contoso Emergency Response';
 
   static get styles() {
@@ -51,13 +49,12 @@ export class AppHeader extends LitElement {
   render() {
     return html`
       <header>
-        <div class="headerDiv">
-        </div>
+        <div class="headerDiv"></div>
 
         <h1>${this.title}</h1>
 
         <div class="headerDiv">
-          <mgt-login></mgt-login>
+          <mgt-login id="me"></mgt-login>
         </div>
       </header>
     `;
