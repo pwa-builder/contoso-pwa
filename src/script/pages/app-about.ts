@@ -98,92 +98,119 @@ export class AppAbout extends LitElement {
 
   static get styles() {
     return css`
-      fast-card {
-        padding: 18px;
-        padding-top: 0px;
-        margin-top: 10px;
-
-        background: #212121de;
-        backdrop-filter: blur(8px);
+      select {
+        width: 100%;
+        height: 38px;
+        border: 1px solid #8a8886;
       }
 
-      img {
-        position: fixed;
-        top: 4em;
-        left: 0em;
-        right: 0em;
-        z-index: -1;
-        object-fit: contain;
+      textarea {
+        width: 97%;
+        padding: 0.5em;
+        margin: 0 -2em 0 0;
+        font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI',
+          -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue',
+          sans-serif;
       }
 
-      #aboutCards {
-        display: flex;
-        position: fixed;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
-        top: 4em;
-
-        inset: 4em 0em 1em;
+      p {
+        margin: 0;
       }
 
-      #aboutCards fast-card {
-        margin-top: 10px;
+      fast-button {
+        background-color: white;
+        color: black;
+        border: 1px solid #8a8886;
+        width: 130px;
+        border-radius: 50px;
       }
 
-      #actionsBar {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 2em;
-
-        position: fixed;
-        bottom: 20px;
-        right: 16px;
+      fast-button.primary {
+        background-color: #0078d4;
+        color: #ffffff;
+        border: 1px solid #0078d4;
+        margin-left: 15px;
       }
 
-      #actionsBar fast-button {
-        margin-left: 8px;
+      mgt-people-picker,
+      mgt-teams-channel-picker {
+        --input-border-top: 1px solid #8a8886;
+        --input-border-right: 1px solid #8a8886;
+        --input-border-bottom: 1px solid #8a8886;
+        --input-border-left: 1px solid #8a8886;
       }
 
-      #aboutCards #feedCard {
-        flex: 1;
-        margin: 10px;
-        margin-top: 14em;
+      .feed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 300px;
       }
 
-      #feedCard textarea {
-        width: 98%;
+      .form-wrapper {
+        width: calc(100% - 700px);
+        position: absolute;
+        right: 0;
+        margin: 50px 200px;
+        background-color: #ffffff;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.03);
+        border-radius: 5px;
       }
 
-      #feedCard ul {
-        padding: 0;
-        list-style: none;
-
-        height: 23em;
-        overflow-y: scroll;
+      .form {
+        color: #14142b;
       }
 
-      #feedCard ul::-webkit-scrollbar {
-        display: none;
+      hr.solid {
+        margin: 20px -50px 0;
+        border: 0;
       }
 
-      #infoCard {
-        flex: 3;
-        margin: 10px;
+      .status-bar {
+        padding: 32px 50px 0;
       }
 
-      #infoCard form {
-        display: flex;
-        flex-direction: column;
+      .status-bar h2 {
+        font-size: 28px;
       }
 
-      section.main {
+      .main {
+        padding: 40px 50px;
+        background-color: #fafafa;
         display: flex;
         justify-content: space-around;
       }
 
-      textarea {
-        height: 6em;
+      .column {
+        width: 45%;
+      }
+
+      .column.left {
+        padding-right: 50px;
+      }
+
+      p.label {
+        margin: 1.5em 0 0.5em;
+        font-weight: 700;
+        font-size: 12px;
+      }
+
+      span.label {
+        font-size: 14px;
+        font-weight: 400;
+        color: #14142b;
+        opacity: 0.44;
+      }
+
+      p.disabled {
+        margin: 1.5em 0 3em;
+      }
+
+      .cta {
+        padding: 0 50px 50px;
+        text-align: right;
+        background-color: #fafafa;
       }
     `;
   }
@@ -419,8 +446,8 @@ export class AppAbout extends LitElement {
   render() {
     return html`
       <div>
-        <div id="aboutCards">
-          <fast-card id="feedCard">
+        <div class="feed">
+          <fast-card class="feed__card">
             <h2>Feed</h2>      
             <ul>
               <fast-card>
@@ -435,12 +462,16 @@ export class AppAbout extends LitElement {
               </fast-card>
             </ul>
           </fast-card>
+        </div>
       
-          <fast-card id="infoCard">
-            <h2>Information:</h2>
+        <div class="form-wrapper">
+          
+      
+          <div class="form">
       
             <form>
               <section class="status-bar">
+              <h2>Information:</h2>
                 <div>
                    ${Object.values(Status).map((element: Status) => {
                      if (!isNaN(Number(element))) {
@@ -450,11 +481,12 @@ export class AppAbout extends LitElement {
                      }
                    })}
                 </div>
+                <hr class="solid">
               </section>
       
               <section class="main">
-                <div class="column">
-                  <p>
+                <div class="column left">
+                  <p class="label">
                     <label for="status">
                       <span>Status: </span>
                     </label>
@@ -472,7 +504,7 @@ export class AppAbout extends LitElement {
                       </select>
                     </p>
                   </p>
-                  <p>
+                  <p class="label">
                     <label for="lead">
                       <span>Lead: </span>
                     </label>
@@ -481,7 +513,7 @@ export class AppAbout extends LitElement {
                         this.onLeadChange()}"></mgt-people-picker>
                     </p>
                   </p>
-                  <p>
+                  <p class="label">
                     <label for="severity">
                       <span>Severity: </span>
                     </label>
@@ -498,18 +530,28 @@ export class AppAbout extends LitElement {
                       </select>
                     </p>
                   </p>
-                  <p>
+                  <p class="label">
                     <label for="description">
                       <span>Description: </span>
                     </label>
                     <p>
-                      <fast-text-area id="description" @change="${() =>
-                        this.onDescriptionChange()}" name="desciption" rows="10" cols="30"></fast-text-area>
+                      <textarea @change="${() =>
+                        this.onDescriptionChange()}"  name="description" rows="10" cols="30">Fire started due to campfire near xxx lake. Reported around 10 pm by one of the nearby campers on site.</textarea>
                     </p>
                   </p>
                 </div>
-                <div class="column">
-                  <p>
+                <div class="column right">
+                  <p class="disabled">
+                    <p>
+                      <span class="label">Affected area: </span>
+                      <span>50 acres</span>
+                    </p>
+                    <p>
+                      <span class="label">Estimated # of affected people: </span>
+                      <span>40</span>
+                    </p>
+                  </p>
+                  <p class="label">
                     <label for="assigned">
                       <span>Assigned To: </span>
                     </label>
@@ -518,7 +560,7 @@ export class AppAbout extends LitElement {
                       this.onAssignedToChange()}"></mgt-people-picker>
                     </p>
                   </p>
-                  <p>
+                  <p class="label">
                     <label for="teams">
                       <span>Send updates to Teams channel: </span>
                     </label>
@@ -527,13 +569,13 @@ export class AppAbout extends LitElement {
                         this.onTeamsChannelChange()}"></mgt-teams-channel-picker>
                     </p>
                   </p>
-                  <p>
+                  <p class="label">
                     <label for="comment">
                       <span>Comment: </span>
                     </label>
                     <p>
                       <!-- <fast-text-area name="comment" rows="10" cols="30"></fast-text-area> -->
-                      <mgt-people-mention id="comment" name="comment" @textChanged="${(
+                      <mgt-people-mention id="comment" name="comment" rows="10" cols="30" placeholder="Leave your comment here..." @textChanged="${(
                         e
                       ) => this.onCommentChange(e)}"></mgt-people-mention>
                     </p>
@@ -546,9 +588,9 @@ export class AppAbout extends LitElement {
             <div class="cta">
               <fast-button>cancel</fast-button>
               <fast-button id="save" @click="${() =>
-                this.onClickSave()}" disabled>Save</fast-button>
+                this.onClickSave()}" disabled class="primary">Save</fast-button>
             </div>
-          </fast-card>
+          </div>
         </div>
       
       </div>
