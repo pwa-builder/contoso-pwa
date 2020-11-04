@@ -4,13 +4,14 @@ import { LitElement, css, html, customElement, property } from 'lit-element';
 import '@pwabuilder/pwainstall';
 
 import '../components/sidebar';
+import '../components/pin';
 
 @customElement('app-home')
 export class AppHome extends LitElement {
 
   // For more information on using properties in lit-element
   // check out this link https://lit-element.polymer-project.org/guide/properties#declare-with-decorators
-  @property() message: string = "Welcome!";
+  @property() pins: string[] = ['earthquake', 'flood', 'flood', 'flood', 'wildfire', 'wildfire', 'wildfire'];
 
   static get styles() {
     return css`
@@ -31,15 +32,6 @@ export class AppHome extends LitElement {
         top: 5em;
         left: 1em;
         z-index: 9;
-      }
-
-      img {
-        position: fixed;
-        top: 4em;
-        left: 0em;
-        right: 0em;
-        z-index: 0;
-        object-fit: contain;
       }
 
       .gridFilter {
@@ -93,6 +85,15 @@ export class AppHome extends LitElement {
     return html`
       <div>
         <side-bar></side-bar>
+
+        ${
+          this.pins.map((pin) => {
+            return html`
+            <app-pin pin=${pin} .style="position: absolute; top: ${150 + Math.floor(Math.random() * 500)}px; left: ${Math.floor(Math.random() * (+1000 - +280)) + +280}px;" class="pin">
+            </app-pin>
+            `
+          })
+        }
       </div>
     `;
   }
