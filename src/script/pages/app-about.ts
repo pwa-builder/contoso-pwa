@@ -249,7 +249,7 @@ export class AppAbout extends LitElement {
         this.feedStrings[index].text +=
           'Status was changed to ' +
           AppAbout.generateStatusStrings(this.newFormInfo.status) +
-          '\n';
+          '<br>';
         this.formInfo.status = this.newFormInfo.status;
       }
 
@@ -258,19 +258,22 @@ export class AppAbout extends LitElement {
         this.newFormInfo.lead.forEach((element: any) => {
           console.log(element.displayName);
           this.feedStrings[index].text += element.displayName + ' ';
-        }) + '\n';
+        });
+        this.feedStrings[index].text += '<br>';
         this.formInfo.lead = this.newFormInfo.lead;
       }
 
       if (this.didSeverityChange) {
         this.feedStrings[index].text +=
-          'Severity changed to: ' + Severity[this.newFormInfo.severity] + '\n';
+          'Severity changed to: ' +
+          Severity[this.newFormInfo.severity] +
+          '<br>';
         this.formInfo.severity = this.newFormInfo.severity;
       }
 
       if (this.didDescriptionChange) {
         this.feedStrings[index].text +=
-          'Updated Description: ' + this.newFormInfo.description + '\n';
+          'Updated Description: ' + this.newFormInfo.description + '<br>';
       }
 
       if (this.didAssignedToChange) {
@@ -278,7 +281,8 @@ export class AppAbout extends LitElement {
         this.newFormInfo.assignedTo.forEach((element: any) => {
           console.log(element.displayName);
           this.feedStrings[index].text += element.displayName + ' ';
-        }) + '\n';
+        });
+        this.feedStrings[index].text += '<br>';
         this.formInfo.assignedTo = this.newFormInfo.assignedTo;
       }
 
@@ -288,7 +292,7 @@ export class AppAbout extends LitElement {
           (this.newFormInfo.teamsChannel as any).team.displayName +
           ' > ' +
           (this.newFormInfo.teamsChannel as any).channel.displayName +
-          '\n';
+          '<br>';
         (this.formInfo.teamsChannel as any).team = (this.newFormInfo
           .teamsChannel as any).team;
         (this.formInfo.teamsChannel as any).channel = (this.newFormInfo
@@ -297,7 +301,7 @@ export class AppAbout extends LitElement {
 
       if (this.didCommentChange) {
         this.feedStrings[index].text +=
-          'Updated Comment: ' + this.newFormInfo.comment;
+          'Updated Comment: ' + this.newFormInfo.comment + '<br>';
       }
     }
 
@@ -310,13 +314,16 @@ export class AppAbout extends LitElement {
     this.styleStatus();
   }
   styleStatus() {
+    console.log(this.renderRoot.querySelectorAll('.statusbar'));
+    this.renderRoot
+      .querySelectorAll('.statusbar')
+      .forEach((element: HTMLElement) => {
+        element.style.padding = '10px';
+        element.style.color = 'black';
+      });
     (this.renderRoot.querySelector(
       '#' + Status[this.newFormInfo.status].toString()
     ) as HTMLElement).style.color = 'rgb(71, 165, 210)';
-
-    (this.renderRoot.querySelector(
-      '#' + Status[this.newFormInfo.status].toString()
-    ) as HTMLElement).style.padding = '10px';
   }
 
   onStatusChange() {
@@ -369,7 +376,15 @@ export class AppAbout extends LitElement {
     this.newFormInfo.description = (this.renderRoot.querySelector(
       '#description'
     ) as HTMLInputElement).value;
-    if (this.newFormInfo.description !== this.formInfo.description) {
+    if (
+      this.newFormInfo.description.trim() !== this.formInfo.description.trim()
+    ) {
+      console.log(
+        'new ',
+        this.newFormInfo.description,
+        'old',
+        this.formInfo.description
+      );
       this.didDescriptionChange = true;
     } else {
       this.didDescriptionChange = false;
@@ -475,7 +490,7 @@ export class AppAbout extends LitElement {
                 <div>
                    ${Object.values(Status).map((element: Status) => {
                      if (!isNaN(Number(element))) {
-                       return html`<span id=${Status[element]}
+                       return html`<span id=${Status[element]} class="statusbar"
                          >${AppAbout.generateStatusStrings(element)}</span
                        >`;
                      }
@@ -535,8 +550,8 @@ export class AppAbout extends LitElement {
                       <span>Description: </span>
                     </label>
                     <p>
-                      <textarea @change="${() =>
-                        this.onDescriptionChange()}"  name="description" rows="10" cols="30">Fire started due to campfire near xxx lake. Reported around 10 pm by one of the nearby campers on site.</textarea>
+                      <textarea @keyup="${() =>
+                        this.onDescriptionChange()}"  name="description" id="description" rows="10" cols="30"></textarea>
                     </p>
                   </p>
                 </div>
