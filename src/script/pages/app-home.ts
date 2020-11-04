@@ -3,6 +3,8 @@ import { LitElement, css, html, customElement, property } from 'lit-element';
 // For more info on the @pwabuilder/pwainstall component click here https://github.com/pwa-builder/pwa-install
 import '@pwabuilder/pwainstall';
 
+import '../components/sidebar';
+
 @customElement('app-home')
 export class AppHome extends LitElement {
 
@@ -90,40 +92,7 @@ export class AppHome extends LitElement {
   render() {
     return html`
       <div>
-        <aside>
-          <fast-card>
-            <h2>Hello Megan!</h2>
-      
-            <p>You have 2 new emergency requests today!</p>
-
-            <ul id="alerts">
-              <li>Okanogon has a Wildfire</li>
-              <li>Lake Chelan has a Wildfire</li>
-              <fast-anchor appearance="hypertext" href="/about">Forks has a Wildfire</fast-anchor>
-            </ul>
-          </fast-card>
-      
-          <fast-card>
-            <h2>Filter by Status</h2>
-
-            <div class="gridFilter">
-              <button>Needs Attention</button>
-              <button>Team Assigned</button>
-              <button>Team Deployed</button>
-              <button>Cleanup</button>
-              <button>Done</button>
-            </div>
-
-            <h2>Filter By Emergency</h2>
-
-            <div class="gridFilter">
-              <button>Wildfire</button>
-              <button>Tsunami</button>
-              <button>EarthQuake</button>
-              <button>Tornado</button>
-            </div>
-          </fast-card>
-        </aside>
+        <side-bar></side-bar>
       </div>
     `;
   }

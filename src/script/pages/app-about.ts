@@ -1,5 +1,8 @@
 import { LitElement, css, html, customElement } from 'lit-element';
 import { Providers, ProviderState, MsalProvider } from '@microsoft/mgt';
+
+import '../components/sidebar';
+
 export enum Status {
   /**
    * Needs Attention = 0
@@ -144,6 +147,10 @@ export class AppAbout extends LitElement {
       left: 0;
       height: 100vh;
       width: 300px
+    }
+
+    .feed__card {
+      flex: 1;
     }
 
     .form-wrapper {
@@ -415,8 +422,8 @@ export class AppAbout extends LitElement {
   render() {
     return html`
       <div>
-        <div class="feed">
-          <fast-card class="feed__card">
+        <side-bar>
+          <div class="feed__card">
             <h2>Feed</h2>      
             <ul>
               <fast-card>
@@ -430,8 +437,8 @@ export class AppAbout extends LitElement {
       
               </fast-card>
             </ul>
-          </fast-card>
-        </div>
+          </div>
+        </side-bar>
       
         <div class="form-wrapper">
           
