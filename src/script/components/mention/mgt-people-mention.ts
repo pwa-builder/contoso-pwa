@@ -44,8 +44,8 @@ export class MgtPeopleMention extends MgtPeoplePicker {
       console.log('Key code is ' + event.keyCode);
       this.atmention = true;
     }
+    const input = event.target as HTMLDivElement;
     if (this.atmention) {
-      const input = event.target as HTMLDivElement;
       if (input.textContent !== null && input.textContent !== undefined) {
         this.inputQuery = input.textContent.substring(
           input.textContent.lastIndexOf('@') + 1
@@ -56,6 +56,7 @@ export class MgtPeopleMention extends MgtPeoplePicker {
       }
       //this.handleUserSearch(this.inputQuery);
     }
+    this.fireCustomEvent('textChanged', input.textContent);
   }
 
   protected async loadState(): Promise<void> {
@@ -64,14 +65,12 @@ export class MgtPeopleMention extends MgtPeoplePicker {
 
     const provider = Providers.globalProvider;
 
-    console.log('people', provider);
     if (
       people.length === 0 &&
       provider &&
       provider.state === ProviderState.SignedIn
     ) {
       const graph = provider.graph.forComponent(this);
-      console.log('Inside here');
       if (input) {
         people = [];
         if (this.type === PersonType.person || this.type === PersonType.any) {
@@ -102,21 +101,18 @@ export class MgtPeopleMention extends MgtPeoplePicker {
       this._foundPeopleList = people;
       this.requestUpdate();
       this.showFlyout();
-      console.log(this._foundPeopleList);
     }
   }
   protected showFlyout(): void {
     const flyout = this.flyout;
-    console.log('flyout', flyout);
     if (flyout && this.atmention) {
-      console.log('flyout open');
       flyout.open();
     }
   }
 
   protected renderFlyoutSure(anchor: TemplateResult): TemplateResult {
     return html`
-      <!-- <mgt-flyout-modified light-dismiss class="flyout">
+      <mgt-flyout light-dismiss class="flyout">
         ${anchor}
         <div
           slot="flyout"
@@ -126,14 +122,13 @@ export class MgtPeopleMention extends MgtPeoplePicker {
         >
           <div class="flyout-root">${this.renderFlyoutContent()}</div>
         </div>
-      </mgt-flyout-modified> -->
+      </mgt-flyout
     `;
   }
 
   protected renderFlyoutContent(): TemplateResult {
     let people = this._foundPeopleList;
     if (people !== undefined && people.length > 0) {
-      console.log('Render');
       return this.renderSearchResults(people);
     }
     return html``;
@@ -177,9 +172,7 @@ export class MgtPeopleMention extends MgtPeoplePicker {
       style="width: 500px; padding: 10px"
       placeholder="Start typing a name"
     ></div>`;
-    console.log('HELLOOOOOO');
     const flyoutTemplate = this.renderFlyoutSure(inputTemplate);
-    console.log('Flyout template', flyoutTemplate);
     return html`
       <div class=${classMap(inputClasses)}>
         <div class="people-selected-list">${flyoutTemplate}</div>
@@ -195,7 +188,6 @@ export class MgtPeopleMention extends MgtPeoplePicker {
       'people-person-job-title': true,
       uppercase: !!user.jobTitle,
     };
-    console.log('Inside renderHWLLOOOO');
     return (
       this.renderTemplate('person', { person }, person.id) ||
       html`
@@ -215,14 +207,9 @@ export class MgtPeopleMention extends MgtPeoplePicker {
 
   private onPersonSelectClick(person: IDynamicPerson): void {
     this.atmention = false;
-    console.log('Clicked');
     this.hideFlyout();
     this.selected_people.push(person);
 
-    console.log(
-      'textContext',
-      (this.renderRoot.querySelector('#mentionbox') as HTMLDivElement).innerHTML
-    );
     (this.renderRoot.querySelector(
       '#mentionbox'
     ) as HTMLDivElement).innerHTML = (this.renderRoot.querySelector(
@@ -232,35 +219,16 @@ export class MgtPeopleMention extends MgtPeoplePicker {
     const mydiv = this.renderRoot.querySelector(
       '#mentionbox'
     ) as HTMLDivElement;
-    // const aTag = document.createElement('span');
-    // aTag.textContent = person.displayName;
-    // aTag.contentEditable = 'true';
-    // (aTag as any).person = person;
-    // aTag.addEventListener('input', e => {
-    //   console.log('Here');
-    // });
     const aTag = document.createElement('span');
 
     (aTag as HTMLElement).innerText = person.displayName as string;
     (aTag as HTMLElement).style.color = '#47a5d2';
 
-    // (aTag as any)._isShadowDisabled = true;
-    // console.log('Shadow disabled inside mention');
     aTag.setAttribute('id', this.selected_people.length.toString());
-    //aTag.setAttribute('user-id', person.id);
-    // aTag.setAttribute('view', 'anchor');
-    // aTag.setAttribute('line1-property', 'displayName');
 
-    // aTag.style.display = 'inline-block';
-    // aTag.style.width = 'fit-content';
-    // aTag.style.margin = '0px';
     mydiv.innerHTML += '&#8205;';
     mydiv.appendChild(aTag);
     mydiv.innerHTML += '&#8205;';
-    //mydiv.innerHTML += '&#8203;';
-    // (this.renderRoot.querySelector(
-    //   this.selected_people.length.toString()
-    // ) as HTMLElement).focus();
 
     var ele = this.renderRoot.querySelector('#mentionbox') as HTMLDivElement;
     var length =
@@ -274,10 +242,7 @@ export class MgtPeopleMention extends MgtPeoplePicker {
     sel?.removeAllRanges();
     sel?.addRange(rng);
     ele?.focus();
-    // this.setCaretToPos(
-    //   this.renderRoot.querySelector('#mentionbox') as HTMLInputElement,
-    //   5
-    // );
+    this.fireCustomEvent('textChanged', mydiv.innerHTML);
   }
 
   keyUpOnPersonCard() {

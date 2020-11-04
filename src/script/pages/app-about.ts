@@ -1,5 +1,7 @@
 import { LitElement, css, html, customElement } from 'lit-element';
 import { Providers, ProviderState, MsalProvider } from '@microsoft/mgt';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import '../components/mention/mgt-people-mention';
 export enum Status {
   /**
    * Needs Attention = 0
@@ -45,7 +47,7 @@ export class Information {
   description: string;
   assignedTo: [];
   teamsChannel: {};
-  comment: string;
+  comment: any;
   constructor() {
     const provider = Providers.globalProvider;
     this.status = Status.NeedsAttention;
@@ -193,16 +195,12 @@ export class AppAbout extends LitElement {
     this.newFormInfo = new Information();
   }
 
-  onClickSave() {
+  async onClickSave() {
     const provider = Providers.globalProvider;
-    // if (provider.state === ProviderState.SignedIn) {
-    //   this.loggedInUserDisplayName = (document
-    //     .querySelector('body > fast-design-system-provider > app-index')
-    //     .shadowRoot.querySelector('div > app-header')
-    //     .shadowRoot.querySelector('#me')
-    //     .querySelector('#me') as any).userDetails.displayName;
-    //   console.log('DisplayName', this.loggedInUserDisplayName);
-    // }
+    if (provider.state === ProviderState.SignedIn) {
+      const userDetails = await Providers.globalProvider.graph.api('/me').get();
+      this.loggedInUserDisplayName = userDetails.displayName;
+    }
 
     if (
       this.didStatusChange ||
@@ -210,63 +208,88 @@ export class AppAbout extends LitElement {
       this.didSeverityChange ||
       this.didDescriptionChange ||
       this.didAssignedToChange ||
-      this.didTeamsChannelChange
+      this.didTeamsChannelChange ||
+      this.didCommentChange
     ) {
-      this.feedStrings.push({ displayName: 'Megan Bowen', text: '' });
-    }
-    let index = this.feedStrings.length - 1;
+      this.feedStrings.push({
+        displayName: this.loggedInUserDisplayName,
+        text: '',
+      });
 
-    if (this.didStatusChange) {
-      this.feedStrings[index].text +=
-        'Status was changed to ' +
-        AppAbout.generateStatusStrings(this.newFormInfo.status) +
-        '\n';
-      this.formInfo.status = this.newFormInfo.status;
+      let index = this.feedStrings.length - 1;
+
+      if (this.didStatusChange) {
+        this.feedStrings[index].text +=
+          'Status was changed to ' +
+          AppAbout.generateStatusStrings(this.newFormInfo.status) +
+          '\n';
+        this.formInfo.status = this.newFormInfo.status;
+      }
+
+      if (this.didLeadChange) {
+        this.feedStrings[index].text += 'Leads assigned: ';
+        this.newFormInfo.lead.forEach((element: any) => {
+          console.log(element.displayName);
+          this.feedStrings[index].text += element.displayName + ' ';
+        }) + '\n';
+        this.formInfo.lead = this.newFormInfo.lead;
+      }
+
+      if (this.didSeverityChange) {
+        this.feedStrings[index].text +=
+          'Severity changed to: ' + Severity[this.newFormInfo.severity] + '\n';
+        this.formInfo.severity = this.newFormInfo.severity;
+      }
+
+      if (this.didDescriptionChange) {
+        this.feedStrings[index].text +=
+          'Updated Description: ' + this.newFormInfo.description + '\n';
+      }
+
+      if (this.didAssignedToChange) {
+        this.feedStrings[index].text += 'Assigned To: ';
+        this.newFormInfo.assignedTo.forEach((element: any) => {
+          console.log(element.displayName);
+          this.feedStrings[index].text += element.displayName + ' ';
+        }) + '\n';
+        this.formInfo.assignedTo = this.newFormInfo.assignedTo;
+      }
+
+      if (this.didTeamsChannelChange) {
+        this.feedStrings[index].text +=
+          'Update to teams channel: ' +
+          (this.newFormInfo.teamsChannel as any).team.displayName +
+          ' > ' +
+          (this.newFormInfo.teamsChannel as any).channel.displayName +
+          '\n';
+        (this.formInfo.teamsChannel as any).team = (this.newFormInfo
+          .teamsChannel as any).team;
+        (this.formInfo.teamsChannel as any).channel = (this.newFormInfo
+          .teamsChannel as any).channel;
+      }
+
+      if (this.didCommentChange) {
+        this.feedStrings[index].text +=
+          'Updated Comment: ' + this.newFormInfo.comment;
+      }
     }
 
-    if (this.didLeadChange) {
-      this.feedStrings[index].text += 'Leads assigned: ';
-      this.newFormInfo.lead.forEach((element: any) => {
-        console.log(element.displayName);
-        this.feedStrings[index].text += element.displayName + ' ';
-      }) + '\n';
-      this.formInfo.lead = this.newFormInfo.lead;
-    }
-
-    if (this.didSeverityChange) {
-      this.feedStrings[index].text +=
-        'Severity changed to: ' + Severity[this.newFormInfo.severity] + '\n';
-      this.formInfo.severity = this.newFormInfo.severity;
-    }
-
-    if (this.didDescriptionChange) {
-      this.feedStrings[index].text += this.newFormInfo.description + '\n';
-    }
-
-    if (this.didAssignedToChange) {
-      this.feedStrings[index].text += 'Assigned To: ';
-      this.newFormInfo.assignedTo.forEach((element: any) => {
-        console.log(element.displayName);
-        this.feedStrings[index].text += element.displayName + ' ';
-      }) + '\n';
-      this.formInfo.assignedTo = this.newFormInfo.assignedTo;
-    }
-
-    if (this.didTeamsChannelChange) {
-      this.feedStrings[index].text +=
-        'Update to teams channel: ' +
-        (this.newFormInfo.teamsChannel as any).team.displayName +
-        ' > ' +
-        (this.newFormInfo.teamsChannel as any).channel.displayName +
-        '\n';
-      (this.formInfo.teamsChannel as any).team = (this.newFormInfo
-        .teamsChannel as any).team;
-      (this.formInfo.teamsChannel as any).channel = (this.newFormInfo
-        .teamsChannel as any).channel;
-    }
     console.log('this.feedstring', this.feedStrings);
-    this.didStatusChange = this.didLeadChange = this.didSeverityChange = this.didAssignedToChange = this.didDescriptionChange = this.didTeamsChannelChange = false;
+    this.didStatusChange = this.didLeadChange = this.didSeverityChange = this.didAssignedToChange = this.didDescriptionChange = this.didTeamsChannelChange = this.didCommentChange = false;
     this.updateSave();
+  }
+
+  firstUpdated() {
+    this.styleStatus();
+  }
+  styleStatus() {
+    (this.renderRoot.querySelector(
+      '#' + Status[this.newFormInfo.status].toString()
+    ) as HTMLElement).style.color = 'rgb(71, 165, 210)';
+
+    (this.renderRoot.querySelector(
+      '#' + Status[this.newFormInfo.status].toString()
+    ) as HTMLElement).style.padding = '10px';
   }
 
   onStatusChange() {
@@ -279,6 +302,7 @@ export class AppAbout extends LitElement {
     } else {
       this.didStatusChange = false;
     }
+    this.styleStatus();
     this.updateSave();
   }
 
@@ -327,7 +351,7 @@ export class AppAbout extends LitElement {
   }
 
   onAssignedToChange() {
-    this.newFormInfo.lead = (this.renderRoot.querySelector(
+    this.newFormInfo.assignedTo = (this.renderRoot.querySelector(
       '#assigned'
     ) as any).selectedPeople;
     if (
@@ -344,7 +368,6 @@ export class AppAbout extends LitElement {
       }
       this.didAssignedToChange = false;
     } else this.didAssignedToChange = true;
-
     this.updateSave();
   }
 
@@ -368,7 +391,14 @@ export class AppAbout extends LitElement {
     this.updateSave();
   }
 
-  onCommentChange() {}
+  onCommentChange(e: any) {
+    this.newFormInfo.comment = e.detail;
+    console.log(e.detail);
+    if (this.newFormInfo.comment !== this.formInfo.comment) {
+      this.didCommentChange = true;
+    } else this.didCommentChange = false;
+    this.updateSave();
+  }
 
   updateSave() {
     if (
@@ -377,7 +407,8 @@ export class AppAbout extends LitElement {
       this.didSeverityChange ||
       this.didDescriptionChange ||
       this.didAssignedToChange ||
-      this.didTeamsChannelChange
+      this.didTeamsChannelChange ||
+      this.didCommentChange
     ) {
       (this.renderRoot.querySelector('#save') as any).disabled = false;
     } else {
@@ -395,7 +426,7 @@ export class AppAbout extends LitElement {
               <fast-card>
                 ${this.feedStrings.map((info) => {
                   return html`<h3>${info.displayName}</h3>
-                    <p>${info.text}</p>`;
+                    <p>${unsafeHTML(info.text)}</p>`;
                 })}
               </fast-card>
       
@@ -413,7 +444,7 @@ export class AppAbout extends LitElement {
                 <div>
                    ${Object.values(Status).map((element: Status) => {
                      if (!isNaN(Number(element))) {
-                       return html`<span
+                       return html`<span id=${Status[element]}
                          >${AppAbout.generateStatusStrings(element)}</span
                        >`;
                      }
@@ -430,9 +461,7 @@ export class AppAbout extends LitElement {
                     <p>
                       <select id="status" name="status" .value=${
                         this.formInfo.status
-                      } @change="${(e) =>
-      // this.onStatusChange(e)
-      this.onStatusChange()}">
+                      } @change="${() => this.onStatusChange()}">
                       ${Object.values(Status).map((element: Status) => {
                         if (!isNaN(Number(element))) {
                           return html`<option value=${element}>
@@ -440,11 +469,6 @@ export class AppAbout extends LitElement {
                           </option>`;
                         }
                       })}
-                        <!-- <option value="needs-attention">Needs attention</option>
-                        <option value="team-assigned">Team assigned</option>
-                        <option value="team-deployed">Team deployed</option>
-                        <option value="cleanup">Cleanup</option>
-                        <option value="done">Done</option> -->
                       </select>
                     </p>
                   </p>
@@ -508,7 +532,10 @@ export class AppAbout extends LitElement {
                       <span>Comment: </span>
                     </label>
                     <p>
-                      <fast-text-area name="comment" rows="10" cols="30"></fast-text-area>
+                      <!-- <fast-text-area name="comment" rows="10" cols="30"></fast-text-area> -->
+                      <mgt-people-mention id="comment" name="comment" @textChanged="${(
+                        e
+                      ) => this.onCommentChange(e)}"></mgt-people-mention>
                     </p>
                   </p>
                 </div>
