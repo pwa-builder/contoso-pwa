@@ -21,11 +21,16 @@ export class SideBar extends LitElement {
             flex-direction: column;
             align-items: flex-start;
             justify-content: space-evenly;
+
+            animation-name: slidein;
+            animation-duration: 240ms;
           }
 
           #logo {
             padding-top: 1.6em;
             padding-left: 2em;
+            height: 140px;
+            width: 179px;
           }
 
           section {
@@ -73,7 +78,7 @@ export class SideBar extends LitElement {
             align-items: center;
           }
 
-          #distList li img {
+          li img {
               width: 32px;
               height: 32px;
               margin-right: 10px;
@@ -102,6 +107,18 @@ export class SideBar extends LitElement {
           ul a {
             color: initial;
             text-decoration: none;
+          }
+
+          @keyframes slidein {
+              from {
+                  opacity: 0;
+                  transform: translateX(-120px);
+              }
+
+              to {
+                  opacity: 1;
+                  transform: translateX(0);
+              }
           }
 
     `;
