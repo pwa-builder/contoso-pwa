@@ -18,6 +18,7 @@ export class AppIndex extends LitElement {
       main {
         padding: 16px;
         height: 96vh;
+        background: white;
         background-image: url('/assets/mainMap.png');
       }
 
