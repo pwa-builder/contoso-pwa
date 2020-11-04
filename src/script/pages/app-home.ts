@@ -9,8 +9,6 @@ import '../components/pin';
 @customElement('app-home')
 export class AppHome extends LitElement {
 
-  // For more information on using properties in lit-element
-  // check out this link https://lit-element.polymer-project.org/guide/properties#declare-with-decorators
   @property() pins: string[] = ['earthquake', 'flood', 'flood', 'flood', 'wildfire', 'wildfire', 'wildfire'];
 
   static get styles() {

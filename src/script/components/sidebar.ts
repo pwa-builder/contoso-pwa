@@ -76,6 +76,7 @@ export class SideBar extends LitElement {
           #disList li {
             display: flex;
             align-items: center;
+            cursor: pointer;
           }
 
           li img {
