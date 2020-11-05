@@ -341,25 +341,27 @@ export class AppAbout extends LitElement {
   }
 
   async sendMail(index: number, name: string) {
-    const provider = Providers.globalProvider;
-    const client = provider.graph.client;
-    const scopes = 'Mail.Send';
-    const message = this.feedStrings[index].text.replaceAll('<br>', '\n');
-    const sendMail = {
-      message: {
-        subject: 'Update by ' + name,
-        body: {
-          contentType: 'Text',
-          content: message,
+    if (this.subscriberList.length > 0) {
+      const provider = Providers.globalProvider;
+      const client = provider.graph.client;
+      const scopes = 'Mail.Send';
+      const message = this.feedStrings[index].text.replaceAll('<br>', '\n');
+      const sendMail = {
+        message: {
+          subject: 'Update by ' + name,
+          body: {
+            contentType: 'Text',
+            content: message,
+          },
+          toRecipients: this.subscriberList,
         },
-        toRecipients: this.subscriberList,
-      },
-      saveToSentItems: 'false',
-    };
-    await client
-      .api('/me/sendMail')
-      .middlewareOptions(prepScopes(scopes))
-      .post(sendMail);
+        saveToSentItems: 'false',
+      };
+      await client
+        .api('/me/sendMail')
+        .middlewareOptions(prepScopes(scopes))
+        .post(sendMail);
+    }
   }
 
   async sendTeamsMessage(index: number) {
