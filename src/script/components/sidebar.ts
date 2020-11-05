@@ -23,10 +23,21 @@ export class SideBar extends LitElement {
 
             animation-name: slidein;
             animation-duration: 240ms;
+
+            overflow: auto;
+          }
+
+          #sideBar::-webkit-scrollbar {
+              background: grey;
+              width: 5px;
+          }
+
+          #sideBar::-webkit-scrollbar-track {
+            background: lightgrey;
           }
 
           #logo {
-            padding-top: 1em;
+            padding-top: 1.6em;
             padding-left: 2em;
             height: 140px;
             width: 179px;
@@ -97,6 +108,7 @@ export class SideBar extends LitElement {
           #userEmers li {
             display: flex;
             align-items: center;
+            justify-content: space-between;
           }
 
           .forward {
