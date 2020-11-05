@@ -1,5 +1,10 @@
 import { LitElement, css, html, customElement } from 'lit-element';
-import { Providers, ProviderState, MsalProvider } from '@microsoft/mgt';
+import {
+  Providers,
+  ProviderState,
+  MsalProvider,
+  prepScopes,
+} from '@microsoft/mgt';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 import '../components/mention/mgt-people-mention';
 export enum Status {
@@ -73,6 +78,7 @@ export class AppAbout extends LitElement {
   didAssignedToChange: Boolean = false;
   didTeamsChannelChange: Boolean = false;
   didCommentChange: Boolean = false;
+  subscriberList: any[] = [];
   feedStrings: any[] = [
     {
       displayName: 'John Firefighter',
@@ -227,91 +233,155 @@ export class AppAbout extends LitElement {
     if (provider.state === ProviderState.SignedIn) {
       const userDetails = await Providers.globalProvider.graph.api('/me').get();
       this.loggedInUserDisplayName = userDetails.displayName;
-    }
 
-    if (
-      this.didStatusChange ||
-      this.didLeadChange ||
-      this.didSeverityChange ||
-      this.didDescriptionChange ||
-      this.didAssignedToChange ||
-      this.didTeamsChannelChange ||
-      this.didCommentChange
-    ) {
-      this.feedStrings.push({
-        displayName: this.loggedInUserDisplayName,
-        text: '',
-      });
-
-      let index = this.feedStrings.length - 1;
-
-      if (this.didStatusChange) {
-        this.feedStrings[index].text +=
-          'Status was changed to ' +
-          AppAbout.generateStatusStrings(this.newFormInfo.status) +
-          '<br>';
-        this.formInfo.status = this.newFormInfo.status;
-      }
-
-      if (this.didLeadChange) {
-        this.feedStrings[index].text += 'Leads assigned: ';
-        this.newFormInfo.lead.forEach((element: any) => {
-          console.log(element.displayName);
-          this.feedStrings[index].text += element.displayName + ' ';
+      if (
+        this.didStatusChange ||
+        this.didLeadChange ||
+        this.didSeverityChange ||
+        this.didDescriptionChange ||
+        this.didAssignedToChange ||
+        this.didTeamsChannelChange ||
+        this.didCommentChange
+      ) {
+        this.feedStrings.push({
+          displayName: this.loggedInUserDisplayName,
+          text: '',
         });
-        this.feedStrings[index].text += '<br>';
-        this.formInfo.lead = this.newFormInfo.lead;
+
+        let index = this.feedStrings.length - 1;
+
+        if (this.didStatusChange) {
+          this.feedStrings[index].text +=
+            'Status was changed to ' +
+            AppAbout.generateStatusStrings(this.newFormInfo.status) +
+            '<br>';
+          this.formInfo.status = this.newFormInfo.status;
+        }
+
+        if (this.didLeadChange) {
+          this.feedStrings[index].text += 'Leads assigned: ';
+          this.newFormInfo.lead.forEach((element: any) => {
+            console.log(element.displayName);
+            this.feedStrings[index].text += element.displayName + ' ';
+          });
+          this.feedStrings[index].text += '<br>';
+          this.formInfo.lead = this.newFormInfo.lead;
+        }
+
+        if (this.didSeverityChange) {
+          this.feedStrings[index].text +=
+            'Severity changed to: ' +
+            Severity[this.newFormInfo.severity] +
+            '<br>';
+          this.formInfo.severity = this.newFormInfo.severity;
+        }
+
+        if (this.didDescriptionChange) {
+          this.feedStrings[index].text +=
+            'Updated Description: ' + this.newFormInfo.description + '<br>';
+        }
+
+        if (this.didAssignedToChange) {
+          this.feedStrings[index].text += 'Assigned To: ';
+          this.newFormInfo.assignedTo.forEach((element: any) => {
+            console.log(element.displayName);
+            this.feedStrings[index].text += element.displayName + ' ';
+          });
+          this.feedStrings[index].text += '<br>';
+          this.formInfo.assignedTo = this.newFormInfo.assignedTo;
+        }
+
+        if (this.didTeamsChannelChange) {
+          this.feedStrings[index].text +=
+            'Update to teams channel: ' +
+            (this.newFormInfo.teamsChannel as any).team.displayName +
+            ' > ' +
+            (this.newFormInfo.teamsChannel as any).channel.displayName +
+            '<br>';
+          (this.formInfo.teamsChannel as any).team = (this.newFormInfo
+            .teamsChannel as any).team;
+          (this.formInfo.teamsChannel as any).channel = (this.newFormInfo
+            .teamsChannel as any).channel;
+        }
+
+        if (this.didCommentChange) {
+          this.feedStrings[index].text +=
+            'Updated Comment: ' + this.newFormInfo.comment + '<br>';
+        }
+        console.log('id', (this.newFormInfo.teamsChannel as any).team);
+
+        if (
+          (this.renderRoot.querySelector('#updates') as HTMLInputElement)
+            .checked
+        ) {
+          this.subscriberList.push({
+            emailAddress: {
+              address: userDetails.mail,
+            },
+          });
+        }
+        //Send teams channel message
+        await this.sendTeamsMessage(index);
+        await this.sendMail(index, userDetails.displayName);
       }
 
-      if (this.didSeverityChange) {
-        this.feedStrings[index].text +=
-          'Severity changed to: ' +
-          Severity[this.newFormInfo.severity] +
-          '<br>';
-        this.formInfo.severity = this.newFormInfo.severity;
-      }
-
-      if (this.didDescriptionChange) {
-        this.feedStrings[index].text +=
-          'Updated Description: ' + this.newFormInfo.description + '<br>';
-      }
-
-      if (this.didAssignedToChange) {
-        this.feedStrings[index].text += 'Assigned To: ';
-        this.newFormInfo.assignedTo.forEach((element: any) => {
-          console.log(element.displayName);
-          this.feedStrings[index].text += element.displayName + ' ';
-        });
-        this.feedStrings[index].text += '<br>';
-        this.formInfo.assignedTo = this.newFormInfo.assignedTo;
-      }
-
-      if (this.didTeamsChannelChange) {
-        this.feedStrings[index].text +=
-          'Update to teams channel: ' +
-          (this.newFormInfo.teamsChannel as any).team.displayName +
-          ' > ' +
-          (this.newFormInfo.teamsChannel as any).channel.displayName +
-          '<br>';
-        (this.formInfo.teamsChannel as any).team = (this.newFormInfo
-          .teamsChannel as any).team;
-        (this.formInfo.teamsChannel as any).channel = (this.newFormInfo
-          .teamsChannel as any).channel;
-      }
-
-      if (this.didCommentChange) {
-        this.feedStrings[index].text +=
-          'Updated Comment: ' + this.newFormInfo.comment + '<br>';
-      }
+      console.log('this.feedstring', this.feedStrings);
+      this.didStatusChange = this.didLeadChange = this.didSeverityChange = this.didAssignedToChange = this.didDescriptionChange = this.didTeamsChannelChange = this.didCommentChange = false;
+      this.updateSave();
     }
-
-    console.log('this.feedstring', this.feedStrings);
-    this.didStatusChange = this.didLeadChange = this.didSeverityChange = this.didAssignedToChange = this.didDescriptionChange = this.didTeamsChannelChange = this.didCommentChange = false;
-    this.updateSave();
   }
 
   firstUpdated() {
     this.styleStatus();
+  }
+
+  async sendMail(index: number, name: string) {
+    const provider = Providers.globalProvider;
+    const client = provider.graph.client;
+    const scopes = 'Mail.Send';
+    const message = this.feedStrings[index].text.replaceAll('<br>', '\n');
+    const sendMail = {
+      message: {
+        subject: 'Update by ' + name,
+        body: {
+          contentType: 'Text',
+          content: message,
+        },
+        toRecipients: this.subscriberList,
+      },
+      saveToSentItems: 'false',
+    };
+    await client
+      .api('/me/sendMail')
+      .middlewareOptions(prepScopes(scopes))
+      .post(sendMail);
+  }
+
+  async sendTeamsMessage(index: number) {
+    const provider = Providers.globalProvider;
+    const client = provider.graph.client;
+
+    const scopes = ['ChannelMessage.Send', 'Group.ReadWrite.All'];
+
+    const message = this.feedStrings[index].text.replaceAll('<br>', '\n');
+    console.log('message', message);
+    const sendMessage = {
+      body: {
+        content: message,
+      },
+    };
+    if ((this.newFormInfo.teamsChannel as any).team.id !== undefined) {
+      let result = await client
+        .api(
+          'teams/' +
+            (this.newFormInfo.teamsChannel as any).team.id +
+            '/channels/' +
+            (this.newFormInfo.teamsChannel as any).channel.id +
+            '/messages'
+        )
+        .middlewareOptions(scopes)
+        .post(sendMessage);
+    }
   }
   styleStatus() {
     console.log(this.renderRoot.querySelectorAll('.statusbar'));
@@ -554,7 +624,12 @@ export class AppAbout extends LitElement {
                         this.onDescriptionChange()}"  name="description" id="description" rows="10" cols="30"></textarea>
                     </p>
                   </p>
+                  <div>
+                  <input type="checkbox" name="updates" class="updates" id="updates"> 
+                  <label for="updates"> Subscribe for updates</label><br>
                 </div>
+                </div>
+ 
                 <div class="column right">
                   <p class="disabled">
                     <p>
