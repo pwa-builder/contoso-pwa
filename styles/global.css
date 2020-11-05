@@ -1,5 +1,5 @@
 :root {
-  --font-family:'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+  --font-family: 'Poppins', system-ui;
   --app-color-primary: pink;
 }
 
@@ -9,4 +9,5 @@ html, body {
   margin: 0;
   background: #181818;
   font-size: 14px;
+  overflow-y: hidden;
 }

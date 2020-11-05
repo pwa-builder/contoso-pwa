@@ -16,9 +16,8 @@ export class AppIndex extends LitElement {
   static get styles() {
     return css`
       main {
-        padding: 16px;
-        height: 88vh;
-        background-image: url('/assets/mainMap.png');
+        padding: 0px;
+        background: white;
       }
 
       #routerOutlet > * {
@@ -87,8 +86,6 @@ export class AppIndex extends LitElement {
   render() {
     return html`
       <div>
-        <app-header></app-header>
-
         <main>
           <div id="routerOutlet"></div>
         </main>

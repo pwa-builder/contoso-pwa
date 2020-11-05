@@ -27,11 +27,20 @@
   <!-- Microsoft Fast Components https://www.fast.design/docs/components/getting-started-->
   <script type="module" src="https://unpkg.com/@microsoft/fast-components"></script>
 
+  <!-- poppins font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- for share icon -->
+  <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+
   <!-- A stylesheet to design the pages. -->
   <link href="styles/global.css" rel="stylesheet">
 
   <!--<script type="module" src="/build/src/script/pages/app-index.js"></script>-->
   <script type="module" src="build/pages/app-index.js"></script>
+
+  <link rel="stylesheet" href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.css" type="text/css">
+  <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js"></script>
 </head>
 
 <body>
@@ -43,6 +52,7 @@
    <!-- For more info on the pwa-update component click here https://github.com/pwa-builder/pwa-update -->
    <script type="module" src="https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate"></script>
    <pwa-update offlineToastDuration="0" swpath="pwabuilder-sw.js"></pwa-update>
+   
 </body>
 
 </html>
