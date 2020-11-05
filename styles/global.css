@@ -9,4 +9,5 @@ html, body {
   margin: 0;
   background: #181818;
   font-size: 14px;
+  overflow-y: hidden;
 }

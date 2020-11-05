@@ -20,14 +20,13 @@ export class SideBar extends LitElement {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            justify-content: space-evenly;
 
             animation-name: slidein;
             animation-duration: 240ms;
           }
 
           #logo {
-            padding-top: 1.6em;
+            padding-top: 1em;
             padding-left: 2em;
             height: 140px;
             width: 179px;
@@ -77,6 +76,12 @@ export class SideBar extends LitElement {
             display: flex;
             align-items: center;
             cursor: pointer;
+          }
+
+          #disList li ion-icon {
+            margin-right: 10px;
+            width: 33px;
+            height: 25px;
           }
 
           li img {
@@ -129,6 +134,26 @@ export class SideBar extends LitElement {
         super();
     }
 
+    filterDist(type: string) {
+        let event = new CustomEvent('filter-dist', {
+          detail: {
+            type
+          }
+        });
+        this.dispatchEvent(event);
+    }
+
+    filterStatus(status: string, checked: boolean) {
+        if (checked === true) {
+            let event = new CustomEvent('filter-status', {
+                detail: {
+                  status
+                }
+              });
+              this.dispatchEvent(event);
+        }
+    }
+
     render() {
         return html`
         <div id="sideBar">
@@ -164,22 +189,26 @@ export class SideBar extends LitElement {
 
             <ul id="filterList">
               <li>
-                <input type="checkbox">
-                Needs Attention
+                <input @change="${(ev) => this.filterStatus("All", ev.target.checked)}" type="checkbox">
+                All
               </li>
               <li>
+                <input @change="${(ev) => this.filterStatus("Needs Attention", ev.target.checked)}" type="checkbox">
+                Needs Attention
+              </li>
+              <li @change="${(ev) => this.filterStatus("Team Assigned", ev.target.checked)}">
                 <input type="checkbox">
                 Team Assigned
               </li>
-              <li>
+              <li @change="${(ev) => this.filterStatus("Team Deployed", ev.target.checked)}">
                 <input type="checkbox">
                 Team Deployed
               </li>
-              <li>
+              <li @change="${(ev) => this.filterStatus("Cleanup", ev.target.checked)}">
                 <input type="checkbox">
                 Cleanup
               </li>
-              <li>
+              <li @change="${(ev) => this.filterStatus("Done", ev.target.checked)}">
                 <input type="checkbox">
                 Done
               </li>
@@ -190,23 +219,27 @@ export class SideBar extends LitElement {
             <h2>Filter by Emergency</h2>
 
             <ul id="disList">
-              <li>
+              <li @click="${() => this.filterDist('All')}">
+                <ion-icon name="refresh-outline"></ion-icon>
+                Reset
+              </li>
+              <li @click="${() => this.filterDist('tsunami')}">
                 <img src="/assets/appIcons/tsunami.svg" alt="tsunami icon">
                 Tsunami
               </li>
-              <li>
+              <li @click="${() => this.filterDist('flood')}">
                 <img src="/assets/appIcons/flood.svg" alt="flood icon">
                 Flood
               </li>
-              <li>
+              <li @click="${() => this.filterDist('wildfire')}">
                 <img src="/assets/appIcons/wildfire.svg" alt="wildfire icon">
                 Wildfire
               </li>
-              <li>
+              <li @click="${() => this.filterDist('earthquake')}">
                 <img src="/assets/appIcons/earthquake.svg" alt="earthquake icon">
                 Earthquakes
               </li>
-              <li>
+              <li @click="${() => this.filterDist('volcano')}">
                 <img src="/assets/appIcons/volcano.svg" alt="volcano icon">
                 Volcano
               </li>

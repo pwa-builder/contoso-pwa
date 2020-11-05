@@ -6,10 +6,66 @@ import '@pwabuilder/pwainstall';
 import '../components/sidebar';
 import '../components/pin';
 
+// for map
+declare var atlas: any;
+
 @customElement('app-home')
 export class AppHome extends LitElement {
 
-  @property() pins: string[] = ['earthquake', 'flood', 'flood', 'flood', 'wildfire', 'wildfire', 'wildfire'];
+  @property() defaultPins: any[] = [
+    {
+      type: "earthquake",
+      status: "Team Deployed",
+      containment: "40%"
+    },
+    {
+      type: "earthquake",
+      status: "Team Assigned",
+      containment: "0%"
+    },
+    {
+      type: "flood",
+      status: "Cleanup",
+      containment: "98%"
+    },
+    {
+      type: "flood",
+      status: "Done",
+      containment: "100%"
+    },
+    {
+      type: "flood",
+      status: "Team Assigned",
+      containment: "10%"
+    },
+    {
+      type: "wildfire",
+      status: "Team Deployed",
+      containment: "24%"
+    },
+    {
+      type: "wildfire",
+      status: "Team Deployed",
+      containment: "44%"
+    },
+    {
+      type: "wildfire",
+      status: "Team Deployed",
+      containment: "67%"
+    },
+    {
+      type: "tsunami",
+      status: "Team Assigned",
+      containment: "2%"
+    },
+    {
+      type: "tsunami",
+      status: "Team Deployed",
+      containment: "27%"
+    }
+  ];
+
+  @property() pins: any[] = [];
 
   static get styles() {
     return css`
@@ -56,6 +112,12 @@ export class AppHome extends LitElement {
         width: 100%;
       }
 
+      #myMap {
+        margin-left: 20em;
+        height: 100vh;
+        width: 100%;
+      }
+
     `;
   }
 
@@ -64,9 +126,20 @@ export class AppHome extends LitElement {
   }
 
   firstUpdated() {
-    // this method is a lifecycle even in lit-element
-    // for more info check out the lit-element docs https://lit-element.polymer-project.org/guide/lifecycle
-    console.log('This is your home page');
+    const mapEl = this.shadowRoot?.querySelector('#myMap');
+
+    new atlas.Map(mapEl, {
+      center: [-121.40, 47.41],
+      zoom: 8,
+      language: 'en-US',
+      authOptions: {
+        authType: 'subscriptionKey',
+        subscriptionKey: 'zr9VA15TqhJbXVvzA8_An6IShYwGCMzc_9VcSXRb-5c'
+      }
+    });
+
+    this.pins = this.defaultPins;
+
   }
 
   share() {
@@ -79,19 +152,61 @@ export class AppHome extends LitElement {
     }
   }
 
+  handleDistFilter(type: string) {
+    console.log(type);
+
+    if (type === "All") {
+      this.pins = this.defaultPins;
+    }
+    else {
+      let tempPins = [];
+
+      this.defaultPins.forEach((pin) => {
+        if (pin.type === type) {
+          tempPins.push(pin);
+        }
+      });
+
+      this.pins = tempPins;
+    }
+
+  }
+
+  handleStatusFilter(status: string) {
+    console.log(status);
+
+    if (status === "All") {
+      this.pins = this.defaultPins;
+    }
+    else {
+      let tempPins = [];
+
+      this.defaultPins.forEach((pin) => {
+        if (pin.status === status) {
+          tempPins.push(pin);
+        }
+      });
+
+      this.pins = tempPins;
+    }
+  }
+
   render() {
     return html`
       <div>
-        <side-bar></side-bar>
+        <side-bar @filter-dist="${(e) => this.handleDistFilter(e.detail.type)}" @filter-status="${(e) => this.handleStatusFilter(e.detail.status)}"></side-bar>
+      
+        <div id="myMap"></div>
 
         ${
           this.pins.map((pin) => {
             return html`
-            <app-pin pin=${pin} .style="position: absolute; top: ${150 + Math.floor(Math.random() * 500)}px; left: ${Math.floor(Math.random() * (+1000 - +280)) + +280}px;" class="pin">
+            <app-pin .pin=${pin.type} .status=${pin.status} .containment=${pin.containment} .style="position: absolute; top: ${150 + Math.floor(Math.random() * 500)}px; left: ${Math.floor(Math.random() * (+1000 - +280)) + +280}px;" class="pin">
             </app-pin>
             `
           })
         }
+      
       </div>
     `;
   }

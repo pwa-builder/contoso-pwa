@@ -3,6 +3,8 @@ import { LitElement, css, html, customElement, property } from 'lit-element';
 @customElement('app-pin')
 export class AppPin extends LitElement {
     @property({ type: String }) pin: string = "wildfire";
+    @property({ type: String }) status: string = "Cleanup";
+    @property({ type: String }) containment: string = "100%";
     @property({ type: Boolean }) openPopup: boolean = false;
     
     static get styles() {
@@ -70,6 +72,11 @@ export class AppPin extends LitElement {
             opacity: 0.44;
           }
 
+          #shareButton ion-icon {
+            height: 15px;
+            width: 15px;
+          }
+
           /* Animations */
 
           @keyframes fadein {
@@ -94,15 +101,28 @@ export class AppPin extends LitElement {
         this.openPopup = !this.openPopup;
     }
 
+    async share() {
+        await navigator.share({
+            text: "Activity Update"
+        })
+    }
+
     render() {
         return html`
           <div @click="${() => this.open()}" class="pin">
             ${this.openPopup ? html`<div class="popup">
               <div class="popupHeader">
                 <span>${this.pin} Activity</span>
-                <button>
-                  <img src="/assets/appIcons/close.svg" alt="close button">
-                </button>
+
+                <div id="popupHeaderActions">
+                  <button @click=${() => this.share()} id="shareButton">
+                    <ion-icon name="share-outline"></ion-icon>
+                  </button>
+
+                  <button>
+                    <img src="/assets/appIcons/close.svg" alt="close button">
+                  </button>
+                </div>
               </div>
 
               <div class="popupContent">

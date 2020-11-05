@@ -16,10 +16,8 @@ export class AppIndex extends LitElement {
   static get styles() {
     return css`
       main {
-        padding: 16px;
-        height: 96vh;
+        padding: 0px;
         background: white;
-        background-image: url('/assets/mainMap.png');
       }
 
       #routerOutlet > * {
