@@ -110,7 +110,7 @@ export class MgtPeopleMention extends MgtPeoplePicker {
     }
   }
 
-  protected renderFlyoutSure(anchor: TemplateResult): TemplateResult {
+  protected renderFlyout(anchor: TemplateResult): TemplateResult {
     return html`
       <mgt-flyout light-dismiss class="flyout">
         ${anchor}
@@ -172,7 +172,7 @@ export class MgtPeopleMention extends MgtPeoplePicker {
       style="width: 500px; padding: 10px"
       placeholder="Start typing a name"
     ></div>`;
-    const flyoutTemplate = this.renderFlyoutSure(inputTemplate);
+    const flyoutTemplate = this.renderFlyout(inputTemplate);
     return html`
       <div class=${classMap(inputClasses)}>
         <div class="people-selected-list">${flyoutTemplate}</div>
