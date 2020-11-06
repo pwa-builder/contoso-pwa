@@ -1,7 +1,7 @@
 {
-  "name": "pwa-starter",
+  "name": "pwa-mgt-disaster-management",
   "version": "0.0.1",
-  "description": "A starter kit for building PWAs!",
+  "description": "A demo to show case PWA builder and Microsoft Graph Toolkit!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

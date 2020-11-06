@@ -3,11 +3,11 @@ import { LitElement, css, html, customElement, property } from 'lit-element';
 // For more info on the @pwabuilder/pwainstall component click here https://github.com/pwa-builder/pwa-install
 import '@pwabuilder/pwainstall';
 
+import '../components/background-map';
 import '../components/sidebar';
+import '../pages/app-login';
 import '../components/pin';
-
-// for map
-declare var atlas: any;
+import { Providers, ProviderState } from '@microsoft/mgt';
 
 @customElement('app-home')
 export class AppHome extends LitElement {
@@ -112,12 +112,34 @@ export class AppHome extends LitElement {
         width: 100%;
       }
 
-      #myMap {
+      .background {
         margin-left: 20em;
-        height: 100vh;
-        width: 100%;
       }
 
+      .map-wrapper {
+        background-color: black;
+        position: absolute;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        opacity: 0.6;
+    }
+
+    .login {
+        position: absolute; 
+        left: 0; 
+        right: 0; 
+        top: 0;
+        margin-left: auto; 
+        margin-right: auto; 
+        margin-top: 150px;
+        width: 200px;
+        padding: 80px;
+        background-color: #ffffff;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.03);
+        border-radius: 5px;
+        color: #14142b;
+    }
     `;
   }
 
@@ -126,18 +148,6 @@ export class AppHome extends LitElement {
   }
 
   firstUpdated() {
-    const mapEl = this.shadowRoot?.querySelector('#myMap');
-
-    new atlas.Map(mapEl, {
-      center: [-121.40, 47.41],
-      zoom: 8,
-      language: 'en-US',
-      authOptions: {
-        authType: 'subscriptionKey',
-        subscriptionKey: 'zr9VA15TqhJbXVvzA8_An6IShYwGCMzc_9VcSXRb-5c'
-      }
-    });
-
     this.pins = this.defaultPins;
 
   }
@@ -192,11 +202,11 @@ export class AppHome extends LitElement {
   }
 
   render() {
-    return html`
-      <div>
+    const provider = Providers.globalProvider;
+    if (provider.state === ProviderState.SignedIn) {
+      return html`
         <side-bar @filter-dist="${(e) => this.handleDistFilter(e.detail.type)}" @filter-status="${(e) => this.handleStatusFilter(e.detail.status)}"></side-bar>
-      
-        <div id="myMap"></div>
+        <background-map class='background'></background-map>
 
         ${
           this.pins.map((pin) => {
@@ -206,8 +216,12 @@ export class AppHome extends LitElement {
             `
           })
         }
-      
-      </div>
-    `;
+      `;
+    }
+    else {
+      return html`
+        <app-login></app-login>
+      `;
+    }
   }
 }

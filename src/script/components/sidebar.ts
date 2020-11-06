@@ -260,7 +260,7 @@ export class SideBar extends LitElement {
           </slot>
 
           <section id="signedIn">
-            <h4>Megan Roberts</h4>
+            <mgt-login></mgt-login>
           </section>
         </div>
     `;

@@ -8,6 +8,7 @@ import {
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 import '../components/mention/mgt-people-mention';
 import '../components/sidebar';
+import '../components/background-map';
 export enum Status {
   /**
    * Needs Attention = 0
@@ -69,6 +70,7 @@ export class Information {
 @customElement('app-about')
 export class AppAbout extends LitElement {
   loggedInUserDisplayName: string = '';
+  // loggedInUserPrincipalName: string = '';
   formInfo: Information;
   newFormInfo: Information;
   isSaveActive: Boolean = false;
@@ -82,9 +84,15 @@ export class AppAbout extends LitElement {
   subscriberList: any[] = [];
   feedStrings: any[] = [
     {
-      displayName: 'John Firefighter',
+      displayName: 'Adele Vance',
+      // userPrincipalName: 'AdeleV',
       text: 'I am fighting this fire, looks like we are making progress!',
     },
+    {
+      displayName: 'Allan Deyoung',
+      // userPrincipalName: 'AllanD',
+      text: 'some other words',
+    }
   ];
   static generateStatusStrings(status: Status) {
     switch (status) {
@@ -105,6 +113,17 @@ export class AppAbout extends LitElement {
 
   static get styles() {
     return css`
+
+      .map-wrapper {
+        background-color: black;
+        position: absolute;
+        top: 0;
+        left: 20em;
+        width: 100vw;
+        height: 100vh;
+        opacity: 0.6;
+      }
+
       select {
         width: 100%;
         height: 38px;
@@ -139,6 +158,11 @@ export class AppAbout extends LitElement {
         margin-left: 15px;
       }
 
+      fast-card {
+        background: transparent;
+        box-shadow: none;
+      }
+
       mgt-people-picker,
       mgt-teams-channel-picker {
         --input-border-top: 1px solid #8a8886;
@@ -157,13 +181,15 @@ export class AppAbout extends LitElement {
 
       .feed__card {
         flex: 1;
+        background: #f6f6f6;
+        padding: 0 1em;
       }
 
       .form-wrapper {
-        width: calc(100% - 700px);
         position: absolute;
-        right: 0;
-        margin: 50px 200px;
+        left: 20em;
+        top: 0;
+        margin: 100px 150px;
         background-color: #ffffff;
         box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.03);
         border-radius: 5px;
@@ -238,6 +264,7 @@ export class AppAbout extends LitElement {
     if (provider.state === ProviderState.SignedIn) {
       const userDetails = await Providers.globalProvider.graph.api('/me').get();
       this.loggedInUserDisplayName = userDetails.displayName;
+      // this.loggedInUserPrincipalName = userDetails.userPrincipalName;
 
       if (
         this.didStatusChange ||
@@ -250,6 +277,7 @@ export class AppAbout extends LitElement {
       ) {
         this.feedStrings.push({
           displayName: this.loggedInUserDisplayName,
+          // userPrincipalName: this.loggedInUserPrincipalName,
           text: '',
         });
 
@@ -544,8 +572,10 @@ export class AppAbout extends LitElement {
             <ul>
               <fast-card>
                 ${this.feedStrings.map((info) => {
-                  return html`<h3>${info.displayName}</h3>
-                    <p>${unsafeHTML(info.text)}</p>`;
+                  return html`
+                    <h3>${info.displayName}</h3>
+                    <p>${unsafeHTML(info.text)}</p>
+                    `;
                 })}
               </fast-card>
       
@@ -555,6 +585,10 @@ export class AppAbout extends LitElement {
             </ul>
           </div>
         </side-bar>
+
+        <div class="map-wrapper">
+          <background-map></background-map>
+        </div>
       
         <div class="form-wrapper">
           
