@@ -92,7 +92,7 @@ export class AppAbout extends LitElement {
       displayName: 'Allan Deyoung',
       // userPrincipalName: 'AllanD',
       text: 'some other words',
-    }
+    },
   ];
   static generateStatusStrings(status: Status) {
     switch (status) {
@@ -113,7 +113,6 @@ export class AppAbout extends LitElement {
 
   static get styles() {
     return css`
-
       .map-wrapper {
         background-color: black;
         position: absolute;
@@ -449,18 +448,7 @@ export class AppAbout extends LitElement {
     this.newFormInfo.lead = (this.renderRoot.querySelector(
       '#lead'
     ) as any).selectedPeople;
-    if (this.newFormInfo.lead.length === this.formInfo.lead.length) {
-      for (var i = 0; i < this.newFormInfo.lead.length; i++) {
-        if (
-          (this.newFormInfo.lead[i] as any).id !==
-          (this.formInfo.lead[i] as any).id
-        ) {
-          this.didLeadChange = true;
-          return;
-        }
-      }
-      this.didLeadChange = false;
-    } else this.didLeadChange = true;
+    this.didLeadChange = this.isDiff(this.formInfo.lead, this.newFormInfo.lead);
 
     this.updateSave();
   }
@@ -484,12 +472,6 @@ export class AppAbout extends LitElement {
     if (
       this.newFormInfo.description.trim() !== this.formInfo.description.trim()
     ) {
-      console.log(
-        'new ',
-        this.newFormInfo.description,
-        'old',
-        this.formInfo.description
-      );
       this.didDescriptionChange = true;
     } else {
       this.didDescriptionChange = false;
@@ -501,20 +483,10 @@ export class AppAbout extends LitElement {
     this.newFormInfo.assignedTo = (this.renderRoot.querySelector(
       '#assigned'
     ) as any).selectedPeople;
-    if (
-      this.newFormInfo.assignedTo.length === this.formInfo.assignedTo.length
-    ) {
-      for (var i = 0; i < this.newFormInfo.assignedTo.length; i++) {
-        if (
-          (this.newFormInfo.assignedTo[i] as any).id !==
-          (this.formInfo.assignedTo[i] as any).id
-        ) {
-          this.didAssignedToChange = true;
-          return;
-        }
-      }
-      this.didAssignedToChange = false;
-    } else this.didAssignedToChange = true;
+    this.didAssignedToChange = this.isDiff(
+      this.formInfo.assignedTo,
+      this.newFormInfo.assignedTo
+    );
     this.updateSave();
   }
 
@@ -563,6 +535,18 @@ export class AppAbout extends LitElement {
     }
     super.requestUpdate();
   }
+
+  isDiff(original: [], changed: []): Boolean {
+    if (original.length === changed.length) {
+      for (var i = 0; i < changed.length; i++) {
+        if ((changed[i] as any).id !== (original[i] as any).id) {
+          return true;
+        }
+      }
+      return false;
+    } else return true;
+  }
+
   render() {
     return html`
       <div>
@@ -575,7 +559,7 @@ export class AppAbout extends LitElement {
                   return html`
                     <h3>${info.displayName}</h3>
                     <p>${unsafeHTML(info.text)}</p>
-                    `;
+                  `;
                 })}
               </fast-card>
       
@@ -687,8 +671,7 @@ export class AppAbout extends LitElement {
                       <span>Assigned To: </span>
                     </label>
                     <p>
-                    <mgt-people-picker name="assigned" id="assigned" @selectionChanged="${() =>
-                      this.onAssignedToChange()}"></mgt-people-picker>
+                        <mgt-people-picker name="assigned" id="assigned" @selectionChanged="${this.onAssignedToChange()}"></mgt-people-picker>
                     </p>
                   </p>
                   <p class="label">
