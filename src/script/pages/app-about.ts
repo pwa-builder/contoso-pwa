@@ -70,7 +70,6 @@ export class Information {
 @customElement('app-about')
 export class AppAbout extends LitElement {
   loggedInUserDisplayName: string = '';
-  // loggedInUserPrincipalName: string = '';
   formInfo: Information;
   newFormInfo: Information;
   isSaveActive: Boolean = false;
@@ -84,14 +83,13 @@ export class AppAbout extends LitElement {
   subscriberList: any[] = [];
   feedStrings: any[] = [
     {
-      displayName: 'Adele Vance',
-      // userPrincipalName: 'AdeleV',
-      text: 'I am fighting this fire, looks like we are making progress!',
+      displayName: 'Lynne Robbins',
+      text: 'Emergency created with status Needs Attention.',
     },
     {
-      displayName: 'Allan Deyoung',
-      // userPrincipalName: 'AllanD',
-      text: 'some other words',
+      displayName: 'Alex Wilber',
+      text:
+        'Updated Description: I will have some availability, you can assign this to me.',
     },
   ];
   static generateStatusStrings(status: Status) {
@@ -178,10 +176,22 @@ export class AppAbout extends LitElement {
         width: 300px;
       }
 
-      .feed__card {
+      .feed-wrapper {
         flex: 1;
         background: #f6f6f6;
         padding: 0 1em;
+      }
+
+      .feed-list {
+        padding-inline-start: 1em;
+      }
+
+      .feed-card {
+        margin: 1.5em 0;
+      }
+
+      .feed-card mgt-person {
+        margin-bottom: 0.5em;
       }
 
       .form-wrapper {
@@ -263,7 +273,6 @@ export class AppAbout extends LitElement {
     if (provider.state === ProviderState.SignedIn) {
       const userDetails = await Providers.globalProvider.graph.api('/me').get();
       this.loggedInUserDisplayName = userDetails.displayName;
-      // this.loggedInUserPrincipalName = userDetails.userPrincipalName;
 
       if (
         this.didStatusChange ||
@@ -275,8 +284,7 @@ export class AppAbout extends LitElement {
         this.didCommentChange
       ) {
         this.feedStrings.push({
-          displayName: this.loggedInUserDisplayName,
-          // userPrincipalName: this.loggedInUserPrincipalName,
+          displayName: 'me',
           text: '',
         });
 
@@ -293,7 +301,6 @@ export class AppAbout extends LitElement {
         if (this.didLeadChange) {
           this.feedStrings[index].text += 'Leads assigned: ';
           this.newFormInfo.lead.forEach((element: any) => {
-            console.log(element.displayName);
             this.feedStrings[index].text += element.displayName + ' ';
           });
           this.feedStrings[index].text += '<br>';
@@ -551,21 +558,22 @@ export class AppAbout extends LitElement {
     return html`
       <div>
         <side-bar>
-          <div class="feed__card">
+          <div class="feed-wrapper">
             <h2>Feed</h2>      
-            <ul>
-              <fast-card>
+            <ul class="feed-list">
+
                 ${this.feedStrings.map((info) => {
                   return html`
-                    <h3>${info.displayName}</h3>
-                    <p>${unsafeHTML(info.text)}</p>
+                    <fast-card class="feed-card">
+                      <mgt-person
+                        person-query=${info.displayName}
+                        view="oneLine"
+                        line1-property="givenName"
+                      ></mgt-person>
+                      <p>${unsafeHTML(info.text)}</p>
+                    </fast-card>
                   `;
                 })}
-              </fast-card>
-      
-              <fast-card>
-      
-              </fast-card>
             </ul>
           </div>
         </side-bar>
