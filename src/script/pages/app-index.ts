@@ -13,7 +13,10 @@ const scopes = [
   'contacts.read',
   'calendars.read',
   'Presence.Read.All',
-  'Presence.Read'
+  'Presence.Read',
+  'ChannelMessage.Send',
+  'Group.ReadWrite.All',
+  'Mail.Send'
 ]
 
   provider = new MsalProvider({
