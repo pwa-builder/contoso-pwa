@@ -268,6 +268,68 @@ export class AppAbout extends LitElement {
     this.newFormInfo = new Information();
   }
 
+  populateFeed() {
+    this.feedStrings.push({
+      displayName: 'me',
+      text: '',
+    });
+
+    let index = this.feedStrings.length - 1;
+    if (this.didStatusChange) {
+      this.feedStrings[index].text +=
+        'Status was changed to ' +
+        AppAbout.generateStatusStrings(this.newFormInfo.status) +
+        '<br>';
+      this.formInfo.status = this.newFormInfo.status;
+    }
+
+    if (this.didLeadChange) {
+      this.feedStrings[index].text += 'Leads assigned: ';
+      this.newFormInfo.lead.forEach((element: any) => {
+        this.feedStrings[index].text += element.displayName + ' ';
+      });
+      this.feedStrings[index].text += '<br>';
+      this.formInfo.lead = this.newFormInfo.lead;
+    }
+
+    if (this.didSeverityChange) {
+      this.feedStrings[index].text +=
+        'Severity changed to: ' + Severity[this.newFormInfo.severity] + '<br>';
+      this.formInfo.severity = this.newFormInfo.severity;
+    }
+
+    if (this.didDescriptionChange) {
+      this.feedStrings[index].text +=
+        'Updated Description: ' + this.newFormInfo.description + '<br>';
+    }
+
+    if (this.didAssignedToChange) {
+      this.feedStrings[index].text += 'Assigned To: ';
+      this.newFormInfo.assignedTo.forEach((element: any) => {
+        this.feedStrings[index].text += element.displayName + ' ';
+      });
+      this.feedStrings[index].text += '<br>';
+      this.formInfo.assignedTo = this.newFormInfo.assignedTo;
+    }
+
+    if (this.didTeamsChannelChange) {
+      this.feedStrings[index].text +=
+        'Update to teams channel: ' +
+        (this.newFormInfo.teamsChannel as any).team.displayName +
+        ' > ' +
+        (this.newFormInfo.teamsChannel as any).channel.displayName +
+        '<br>';
+      (this.formInfo.teamsChannel as any).team = (this.newFormInfo
+        .teamsChannel as any).team;
+      (this.formInfo.teamsChannel as any).channel = (this.newFormInfo
+        .teamsChannel as any).channel;
+    }
+
+    if (this.didCommentChange) {
+      this.feedStrings[index].text +=
+        'Updated Comment: ' + this.newFormInfo.comment + '<br>';
+    }
+  }
   async onClickSave() {
     const provider = Providers.globalProvider;
     if (provider.state === ProviderState.SignedIn) {
@@ -283,71 +345,9 @@ export class AppAbout extends LitElement {
         this.didTeamsChannelChange ||
         this.didCommentChange
       ) {
-        this.feedStrings.push({
-          displayName: 'me',
-          text: '',
-        });
+        this.populateFeed();
 
         let index = this.feedStrings.length - 1;
-
-        if (this.didStatusChange) {
-          this.feedStrings[index].text +=
-            'Status was changed to ' +
-            AppAbout.generateStatusStrings(this.newFormInfo.status) +
-            '<br>';
-          this.formInfo.status = this.newFormInfo.status;
-        }
-
-        if (this.didLeadChange) {
-          this.feedStrings[index].text += 'Leads assigned: ';
-          this.newFormInfo.lead.forEach((element: any) => {
-            this.feedStrings[index].text += element.displayName + ' ';
-          });
-          this.feedStrings[index].text += '<br>';
-          this.formInfo.lead = this.newFormInfo.lead;
-        }
-
-        if (this.didSeverityChange) {
-          this.feedStrings[index].text +=
-            'Severity changed to: ' +
-            Severity[this.newFormInfo.severity] +
-            '<br>';
-          this.formInfo.severity = this.newFormInfo.severity;
-        }
-
-        if (this.didDescriptionChange) {
-          this.feedStrings[index].text +=
-            'Updated Description: ' + this.newFormInfo.description + '<br>';
-        }
-
-        if (this.didAssignedToChange) {
-          this.feedStrings[index].text += 'Assigned To: ';
-          this.newFormInfo.assignedTo.forEach((element: any) => {
-            console.log(element.displayName);
-            this.feedStrings[index].text += element.displayName + ' ';
-          });
-          this.feedStrings[index].text += '<br>';
-          this.formInfo.assignedTo = this.newFormInfo.assignedTo;
-        }
-
-        if (this.didTeamsChannelChange) {
-          this.feedStrings[index].text +=
-            'Update to teams channel: ' +
-            (this.newFormInfo.teamsChannel as any).team.displayName +
-            ' > ' +
-            (this.newFormInfo.teamsChannel as any).channel.displayName +
-            '<br>';
-          (this.formInfo.teamsChannel as any).team = (this.newFormInfo
-            .teamsChannel as any).team;
-          (this.formInfo.teamsChannel as any).channel = (this.newFormInfo
-            .teamsChannel as any).channel;
-        }
-
-        if (this.didCommentChange) {
-          this.feedStrings[index].text +=
-            'Updated Comment: ' + this.newFormInfo.comment + '<br>';
-        }
-        console.log('id', (this.newFormInfo.teamsChannel as any).team);
 
         if (
           (this.renderRoot.querySelector('#updates') as HTMLInputElement)
@@ -378,51 +378,22 @@ export class AppAbout extends LitElement {
     if (this.subscriberList.length > 0) {
       const provider = Providers.globalProvider;
       const client = provider.graph.client;
-      const scopes = 'Mail.Send';
+      //Add scopes
+
       const message = this.feedStrings[index].text.replaceAll('<br>', '\n');
-      const sendMail = {
-        message: {
-          subject: 'Update by ' + name,
-          body: {
-            contentType: 'Text',
-            content: message,
-          },
-          toRecipients: this.subscriberList,
-        },
-        saveToSentItems: 'false',
-      };
-      await client
-        .api('/me/sendMail')
-        .middlewareOptions(prepScopes(scopes))
-        .post(sendMail);
+
+      //Call API
     }
   }
 
   async sendTeamsMessage(index: number) {
     const provider = Providers.globalProvider;
     const client = provider.graph.client;
-
-    const scopes = ['ChannelMessage.Send', 'Group.ReadWrite.All'];
+    //Add scopes
 
     const message = this.feedStrings[index].text.replaceAll('<br>', '\n');
+    //Call API
     console.log('message', message);
-    const sendMessage = {
-      body: {
-        content: message,
-      },
-    };
-    if ((this.newFormInfo.teamsChannel as any).team.id !== undefined) {
-      let result = await client
-        .api(
-          'teams/' +
-            (this.newFormInfo.teamsChannel as any).team.id +
-            '/channels/' +
-            (this.newFormInfo.teamsChannel as any).channel.id +
-            '/messages'
-        )
-        .middlewareOptions(scopes)
-        .post(sendMessage);
-    }
   }
   styleStatus() {
     console.log(this.renderRoot.querySelectorAll('.statusbar'));
@@ -487,9 +458,8 @@ export class AppAbout extends LitElement {
   }
 
   onAssignedToChange() {
-    this.newFormInfo.assignedTo = (this.renderRoot.querySelector(
-      '#assigned'
-    ) as any).selectedPeople;
+    //change this
+    this.newFormInfo.assignedTo = [];
     this.didAssignedToChange = this.isDiff(
       this.formInfo.assignedTo,
       this.newFormInfo.assignedTo
@@ -498,22 +468,22 @@ export class AppAbout extends LitElement {
   }
 
   onTeamsChannelChange() {
-    let selectedItem = (this.renderRoot.querySelector('#teams') as any)
-      .selectedItem;
-    if (selectedItem !== undefined) {
-      (this.newFormInfo.teamsChannel as any).team = selectedItem.team;
-      (this.newFormInfo.teamsChannel as any).channel = selectedItem.channel;
-    }
-    if (
-      (this.newFormInfo.teamsChannel as any).team !==
-        (this.formInfo.teamsChannel as any).team ||
-      (this.newFormInfo.teamsChannel as any).channel !==
-        (this.formInfo.teamsChannel as any).channel
-    ) {
-      this.didTeamsChannelChange = true;
-    } else {
-      this.didTeamsChannelChange = false;
-    }
+    //change this
+    let selectedItem = [];
+    // if (selectedItem !== undefined) {
+    //   (this.newFormInfo.teamsChannel as any).team = selectedItem.team;
+    //   (this.newFormInfo.teamsChannel as any).channel = selectedItem.channel;
+    // }
+    // if (
+    //   (this.newFormInfo.teamsChannel as any).team !==
+    //     (this.formInfo.teamsChannel as any).team ||
+    //   (this.newFormInfo.teamsChannel as any).channel !==
+    //     (this.formInfo.teamsChannel as any).channel
+    // ) {
+    //   this.didTeamsChannelChange = true;
+    // } else {
+    //   this.didTeamsChannelChange = false;
+    // }
     this.updateSave();
   }
 
@@ -678,29 +648,19 @@ export class AppAbout extends LitElement {
                     <label for="assigned">
                       <span>Assigned To: </span>
                     </label>
-                    <p>
-                        <mgt-people-picker name="assigned" id="assigned" @selectionChanged="${this.onAssignedToChange()}"></mgt-people-picker>
-                    </p>
+                  <!-- people picker !-->
                   </p>
                   <p class="label">
                     <label for="teams">
                       <span>Send updates to Teams channel: </span>
                     </label>
-                    <p>
-                      <mgt-teams-channel-picker name="teams" id="teams" @selectionChanged="${() =>
-                        this.onTeamsChannelChange()}"></mgt-teams-channel-picker>
-                    </p>
+                  <!-- Teams channel picker !-->
                   </p>
                   <p class="label">
                     <label for="comment">
                       <span>Comment: </span>
                     </label>
-                    <p>
-                      <!-- <fast-text-area name="comment" rows="10" cols="30"></fast-text-area> -->
-                      <mgt-people-mention id="comment" name="comment" rows="10" cols="30" placeholder="Leave your comment here..." @textChanged="${(
-                        e
-                      ) => this.onCommentChange(e)}"></mgt-people-mention>
-                    </p>
+                        <!-- Mention !-->
                   </p>
                 </div>
               </section>

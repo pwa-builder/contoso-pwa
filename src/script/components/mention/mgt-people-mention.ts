@@ -35,13 +35,11 @@ export class MgtPeopleMention extends MgtPeoplePicker {
   public selected_people: IDynamicPerson[] = [];
   @internalProperty() private _foundPeopleList: IDynamicPerson[] = [];
 
-  // public person_on_focus: IDynamicPerson ;
   onKeyPress(event: KeyboardEvent) {
     console.log('This got called');
   }
   onKeyUp(event: KeyboardEvent) {
     if (event.keyCode === 50) {
-      console.log('Key code is ' + event.keyCode);
       this.atmention = true;
     }
     const input = event.target as HTMLDivElement;
@@ -54,8 +52,9 @@ export class MgtPeopleMention extends MgtPeoplePicker {
         console.log(this.inputQuery);
         this.loadState();
       }
-      //this.handleUserSearch(this.inputQuery);
     }
+
+    //Fire an event on key Up
     this.fireCustomEvent('textChanged', input.textContent);
   }
 
