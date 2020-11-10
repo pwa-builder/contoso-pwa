@@ -589,15 +589,16 @@ export class AppAbout extends LitElement {
       
             <form>
               <section class="status-bar">
-              <h2>Information:</h2>
-                <div>
-                   ${Object.values(Status).map((element: Status) => {
-                     if (!isNaN(Number(element))) {
-                       return html`<span id=${Status[element]} class="statusbar"
-                         >${AppAbout.generateStatusStrings(element)}</span
-                       >`;
-                     }
-                   })}
+                <div class="bar"></div>
+                <h2>Information:</h2>
+                <div class="status-bar-entry">
+                  ${Object.values(Status).map((element: Status) => {
+                    if (!isNaN(Number(element))) {
+                      return html`<span id=${Status[element]} class="statusbar"
+                        >${AppAbout.generateStatusStrings(element)}</span
+                      >`;
+                    }
+                  })}
                 </div>
                 <hr class="solid">
               </section>
@@ -679,7 +680,7 @@ export class AppAbout extends LitElement {
                       <span>Assigned To: </span>
                     </label>
                     <p>
-                        <mgt-people-picker name="assigned" id="assigned" @selectionChanged="${this.onAssignedToChange()}"></mgt-people-picker>
+                        <mgt-people-picker name="assigned" id="assigned" @selectionChanged="${() => this.onAssignedToChange()}"></mgt-people-picker>
                     </p>
                   </p>
                   <p class="label">
