@@ -32,16 +32,16 @@ export class AppLogin extends LitElement {
                 color: #14142b;
             }
 
-            mgt-login {
-                --background-color: #0078d4;
-                --background-color--hover: #005a9e;
-                --color: #ffffff;
-                --color-hover: #edebe9;
-                --font-size: 12px;
-                --font-weight: 400;
-                --width: 105px;
-                --margin: 20px 0;
-            }
+            // mgt-login {
+            //     --background-color: #0078d4;
+            //     --background-color--hover: #005a9e;
+            //     --color: #ffffff;
+            //     --color-hover: #edebe9;
+            //     --font-size: 12px;
+            //     --font-weight: 400;
+            //     --width: 105px;
+            //     --margin: 20px 0;
+            // }
         `;
     }
 
@@ -60,7 +60,6 @@ export class AppLogin extends LitElement {
                     <img id="logo" src="/assets/contosoPWALogo.svg" alt="Contoso Emergency Response">
                     <h2>Let's Start!</h2>
                     <span>Please login to your account to access emergencies and take action!</span>
-                    <mgt-login></mgt-login>
                 </div>
             </div>
         </div>

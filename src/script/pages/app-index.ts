@@ -1,31 +1,7 @@
 import { LitElement, css, html, customElement } from 'lit-element';
 import './app-home';
 import { Router } from '@vaadin/router';
-import { Providers, MsalProvider, ProviderState } from '@microsoft/mgt';
 
-let provider;
-const clientId = 'a974dfa0-9f57-49b9-95db-90f04ce2111a';
-
-const scopes = [ 
-  'user.read',
-  'people.read',
-  'user.readbasic.all',
-  'contacts.read',
-  'calendars.read',
-  'Presence.Read.All',
-  'Presence.Read',
-  'ChannelMessage.Send',
-  'Group.ReadWrite.All',
-  'Mail.Send'
-]
-
-  provider = new MsalProvider({
-    clientId,
-    scopes,
-    redirectUri: window.location.origin
-  });
-
-Providers.globalProvider = provider;
 
 @customElement('app-index')
 export class AppIndex extends LitElement {

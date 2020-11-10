@@ -202,26 +202,18 @@ export class AppHome extends LitElement {
   }
 
   render() {
-    const provider = Providers.globalProvider;
-    if (provider.state === ProviderState.SignedIn) {
-      return html`
-        <side-bar @filter-dist="${(e) => this.handleDistFilter(e.detail.type)}" @filter-status="${(e) => this.handleStatusFilter(e.detail.status)}"></side-bar>
-        <background-map class='background'></background-map>
+    return html`
+      <side-bar @filter-dist="${(e) => this.handleDistFilter(e.detail.type)}" @filter-status="${(e) => this.handleStatusFilter(e.detail.status)}"></side-bar>
+      <background-map class='background'></background-map>
 
-        ${
-          this.pins.map((pin) => {
-            return html`
-            <app-pin .pin=${pin.type} .status=${pin.status} .containment=${pin.containment} .style="position: absolute; top: ${150 + Math.floor(Math.random() * 500)}px; left: ${Math.floor(Math.random() * (+1000 - +280)) + +280}px;" class="pin">
-            </app-pin>
-            `
-          })
-        }
-      `;
-    }
-    else {
-      return html`
-        <app-login></app-login>
-      `;
-    }
+      ${
+        this.pins.map((pin) => {
+          return html`
+          <app-pin .pin=${pin.type} .status=${pin.status} .containment=${pin.containment} .style="position: absolute; top: ${150 + Math.floor(Math.random() * 500)}px; left: ${Math.floor(Math.random() * (+1000 - +280)) + +280}px;" class="pin">
+          </app-pin>
+          `
+        })
+      }
+    `;
   }
 }
