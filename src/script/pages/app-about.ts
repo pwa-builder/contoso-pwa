@@ -362,9 +362,8 @@ export class AppAbout extends LitElement {
         //Send teams channel message
         await this.sendTeamsMessage(index);
         await this.sendMail(index, userDetails.displayName);
+        (this.renderRoot.querySelector('#comment') as any).setText('');
       }
-
-      console.log('this.feedstring', this.feedStrings);
       this.didStatusChange = this.didLeadChange = this.didSeverityChange = this.didAssignedToChange = this.didDescriptionChange = this.didTeamsChannelChange = this.didCommentChange = false;
       this.updateSave();
     }
@@ -519,7 +518,6 @@ export class AppAbout extends LitElement {
 
   onCommentChange(e: any) {
     this.newFormInfo.comment = e.detail;
-    console.log(e.detail);
     if (this.newFormInfo.comment !== this.formInfo.comment) {
       this.didCommentChange = true;
     } else this.didCommentChange = false;
@@ -680,7 +678,8 @@ export class AppAbout extends LitElement {
                       <span>Assigned To: </span>
                     </label>
                     <p>
-                        <mgt-people-picker name="assigned" id="assigned" @selectionChanged="${() => this.onAssignedToChange()}"></mgt-people-picker>
+                        <mgt-people-picker name="assigned" id="assigned" @selectionChanged="${() =>
+                          this.onAssignedToChange()}"></mgt-people-picker>
                     </p>
                   </p>
                   <p class="label">
