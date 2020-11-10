@@ -202,8 +202,6 @@ export class AppHome extends LitElement {
   }
 
   render() {
-    const provider = Providers.globalProvider;
-    if (provider.state === ProviderState.SignedIn) {
       return html`
         <side-bar @filter-dist="${(e) => this.handleDistFilter(e.detail.type)}" @filter-status="${(e) => this.handleStatusFilter(e.detail.status)}"></side-bar>
         <background-map class='background'></background-map>
@@ -217,11 +215,5 @@ export class AppHome extends LitElement {
           })
         }
       `;
-    }
-    else {
-      return html`
-        <app-login></app-login>
-      `;
-    }
   }
 }
