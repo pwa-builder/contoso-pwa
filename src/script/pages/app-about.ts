@@ -362,9 +362,8 @@ export class AppAbout extends LitElement {
         //Send teams channel message
         await this.sendTeamsMessage(index);
         await this.sendMail(index, userDetails.displayName);
+        //(this.renderRoot.querySelector('#comment') as any).setText('');
       }
-
-      console.log('this.feedstring', this.feedStrings);
       this.didStatusChange = this.didLeadChange = this.didSeverityChange = this.didAssignedToChange = this.didDescriptionChange = this.didTeamsChannelChange = this.didCommentChange = false;
       this.updateSave();
     }
@@ -488,8 +487,8 @@ export class AppAbout extends LitElement {
   }
 
   onCommentChange(e: any) {
-    this.newFormInfo.comment = e.detail;
-    console.log(e.detail);
+    //Change this
+    this.newFormInfo.comment = '';
     if (this.newFormInfo.comment !== this.formInfo.comment) {
       this.didCommentChange = true;
     } else this.didCommentChange = false;
@@ -559,15 +558,16 @@ export class AppAbout extends LitElement {
       
             <form>
               <section class="status-bar">
-              <h2>Information:</h2>
-                <div>
-                   ${Object.values(Status).map((element: Status) => {
-                     if (!isNaN(Number(element))) {
-                       return html`<span id=${Status[element]} class="statusbar"
-                         >${AppAbout.generateStatusStrings(element)}</span
-                       >`;
-                     }
-                   })}
+                <div class="bar"></div>
+                <h2>Information:</h2>
+                <div class="status-bar-entry">
+                  ${Object.values(Status).map((element: Status) => {
+                    if (!isNaN(Number(element))) {
+                      return html`<span id=${Status[element]} class="statusbar"
+                        >${AppAbout.generateStatusStrings(element)}</span
+                      >`;
+                    }
+                  })}
                 </div>
                 <hr class="solid">
               </section>
