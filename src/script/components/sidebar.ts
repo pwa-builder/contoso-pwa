@@ -297,9 +297,7 @@ export class SideBar extends LitElement {
           </section>
         </slot>
 
-        <section id="signedIn">
-          <!-- Mgt-login !-->
-        </section>
+        <section id="signedIn"><mgt-login></mgt-login></section>
       </div>
     `;
   }

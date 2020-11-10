@@ -68,6 +68,7 @@ export class AppLogin extends LitElement {
               action!</span
             >
             <!-- Login component -->
+            <mgt-login></mgt-login>
           </div>
         </div>
       </div>
