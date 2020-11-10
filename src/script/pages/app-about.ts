@@ -362,7 +362,7 @@ export class AppAbout extends LitElement {
         //Send teams channel message
         await this.sendTeamsMessage(index);
         await this.sendMail(index, userDetails.displayName);
-        //(this.renderRoot.querySelector('#comment') as any).setText('');
+        (this.renderRoot.querySelector('#comment') as any).setText('');
       }
       this.didStatusChange = this.didLeadChange = this.didSeverityChange = this.didAssignedToChange = this.didDescriptionChange = this.didTeamsChannelChange = this.didCommentChange = false;
       this.updateSave();
