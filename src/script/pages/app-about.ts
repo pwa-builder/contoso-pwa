@@ -4,6 +4,8 @@ import {
   ProviderState,
   MsalProvider,
   prepScopes,
+  MgtPeoplePicker,
+  IDynamicPerson,
 } from '@microsoft/mgt';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 import '../components/mention/mgt-people-mention';
@@ -52,7 +54,7 @@ export class Information {
   lead: [];
   severity: Severity;
   description: string;
-  assignedTo: [];
+  assignedTo: IDynamicPerson[];
   teamsChannel: {};
   comment: any;
   constructor() {
@@ -61,7 +63,7 @@ export class Information {
     this.lead = [];
     this.severity = Severity.Low;
     this.description = '';
-    this.assignedTo = [];
+    this.assignedTo = [] as IDynamicPerson[];
     this.teamsChannel = { team: '', channel: '' };
     this.comment = '';
   }
@@ -377,11 +379,24 @@ export class AppAbout extends LitElement {
     if (this.subscriberList.length > 0) {
       const provider = Providers.globalProvider;
       const client = provider.graph.client;
-      //Add scopes
-
       const message = this.feedStrings[index].text.replaceAll('<br>', '\n');
+      const scopes = 'Mail.Send';
 
-      //Call API
+      const sendMail = {
+        message: {
+          subject: 'Update by ' + name,
+          body: {
+            contentType: 'Text',
+            content: message,
+          },
+          toRecipients: this.subscriberList,
+        },
+        saveToSentItems: 'false',
+      };
+      await client
+        .api('/me/sendMail')
+        .middlewareOptions(prepScopes(scopes))
+        .post(sendMail);
     }
   }
 
@@ -483,7 +498,7 @@ export class AppAbout extends LitElement {
     // } else {
     //   this.didTeamsChannelChange = false;
     // }
-    this.updateSave();
+    // this.updateSave();
   }
 
   onCommentChange(e: any) {
@@ -512,7 +527,7 @@ export class AppAbout extends LitElement {
     super.requestUpdate();
   }
 
-  isDiff(original: [], changed: []): Boolean {
+  isDiff(original: any[], changed: any[]): Boolean {
     if (original.length === changed.length) {
       for (var i = 0; i < changed.length; i++) {
         if ((changed[i] as any).id !== (original[i] as any).id) {
