@@ -378,7 +378,7 @@ export class AppAbout extends LitElement {
       const provider = Providers.globalProvider;
       const client = provider.graph.client;
       const scopes = 'Mail.Send';
-      const message = this.feedStrings[index].text.replaceAll('<br>', '\n');
+      const message = this.formatMessage(this.feedStrings[index].text);
       const sendMail = {
         message: {
           subject: 'Update by ' + name,
@@ -403,7 +403,7 @@ export class AppAbout extends LitElement {
 
     const scopes = ['ChannelMessage.Send', 'Group.ReadWrite.All'];
 
-    const message = this.feedStrings[index].text.replaceAll('<br>', '\n');
+    const message = this.formatMessage(this.feedStrings[index].text);
     console.log('message', message);
     const sendMessage = {
       body: {
@@ -550,6 +550,10 @@ export class AppAbout extends LitElement {
       }
       return false;
     } else return true;
+  }
+
+  formatMessage(message: string) {
+    return message.replaceAll('<br>', '\n').replaceAll(/<\/?span[^>]*>/g, '');
   }
 
   render() {
