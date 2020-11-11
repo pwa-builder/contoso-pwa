@@ -379,9 +379,8 @@ export class AppAbout extends LitElement {
     if (this.subscriberList.length > 0) {
       const provider = Providers.globalProvider;
       const client = provider.graph.client;
-      const message = this.feedStrings[index].text.replaceAll('<br>', '\n');
       const scopes = 'Mail.Send';
-
+      const message = this.formatMessage(this.feedStrings[index].text);
       const sendMail = {
         message: {
           subject: 'Update by ' + name,
@@ -405,8 +404,7 @@ export class AppAbout extends LitElement {
     const client = provider.graph.client;
     //Add scopes
 
-    const message = this.feedStrings[index].text.replaceAll('<br>', '\n');
-    //Call API
+    const message = this.formatMessage(this.feedStrings[index].text);
     console.log('message', message);
   }
   styleStatus() {
@@ -536,6 +534,10 @@ export class AppAbout extends LitElement {
       }
       return false;
     } else return true;
+  }
+
+  formatMessage(message: string) {
+    return message.replaceAll('<br>', '\n').replaceAll(/<\/?span[^>]*>/g, '');
   }
 
   render() {
