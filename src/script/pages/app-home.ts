@@ -5,7 +5,6 @@ import '@pwabuilder/pwainstall';
 
 import '../components/background-map';
 import '../components/sidebar';
-import '../pages/app-login';
 import '../components/pin';
 import { Providers, ProviderState } from '@microsoft/mgt';
 

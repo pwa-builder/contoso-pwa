@@ -1,4 +1,3 @@
-import { Providers, ProviderState } from '@microsoft/mgt';
 import { LitElement, css, html, customElement } from 'lit-element';
 
 import '../components/background-map';
