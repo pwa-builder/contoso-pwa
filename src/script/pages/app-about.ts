@@ -89,7 +89,7 @@ export class AppAbout extends LitElement {
     {
       displayName: 'Alex Wilber',
       text:
-        'Updated Description: I will have some availability, you can assign this to me.',
+        'Updated Comment: I will have some availability, you can assign this to me.',
     },
   ];
   static generateStatusStrings(status: Status) {
@@ -202,6 +202,7 @@ export class AppAbout extends LitElement {
         background-color: #ffffff;
         box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.03);
         border-radius: 5px;
+        width: 800px;
       }
 
       .form {
@@ -571,6 +572,7 @@ export class AppAbout extends LitElement {
                         person-query=${info.displayName}
                         view="oneLine"
                         line1-property="givenName"
+                        person-card="hover"
                       ></mgt-person>
                       <p>${unsafeHTML(info.text)}</p>
                     </fast-card>
@@ -657,7 +659,7 @@ export class AppAbout extends LitElement {
                     </label>
                     <p>
                       <textarea @keyup="${() =>
-                        this.onDescriptionChange()}"  name="description" id="description" rows="10" cols="30"></textarea>
+                        this.onDescriptionChange()}"  name="description" id="description" rows="10" cols="30">Fire started due to campfire near the Lake. Reported around 10 pm yesterday by one of the people on the campsite</textarea>
                     </p>
                   </p>
                   <div>

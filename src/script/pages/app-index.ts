@@ -11,9 +11,9 @@ const scopes = [
   'people.read',
   'user.readbasic.all',
   'contacts.read',
-  'calendars.read',
   'Presence.Read.All',
   'Presence.Read',
+  'group.read.all',
   'ChannelMessage.Send',
   'Group.ReadWrite.All',
   'Mail.Send'
