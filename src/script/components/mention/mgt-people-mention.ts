@@ -36,12 +36,9 @@ export class MgtPeopleMention extends MgtPeoplePicker {
   @internalProperty() private _foundPeopleList: IDynamicPerson[] = [];
 
   // public person_on_focus: IDynamicPerson ;
-  onKeyPress(event: KeyboardEvent) {
-    console.log('This got called');
-  }
+
   onKeyUp(event: KeyboardEvent) {
     if (event.keyCode === 50) {
-      console.log('Key code is ' + event.keyCode);
       this.atmention = true;
     }
     const input = event.target as HTMLDivElement;
@@ -50,8 +47,6 @@ export class MgtPeopleMention extends MgtPeoplePicker {
         this.inputQuery = input.textContent.substring(
           input.textContent.lastIndexOf('@') + 1
         );
-
-        console.log(this.inputQuery);
         this.loadState();
       }
       //this.handleUserSearch(this.inputQuery);
@@ -102,6 +97,12 @@ export class MgtPeopleMention extends MgtPeoplePicker {
       this.requestUpdate();
       this.showFlyout();
     }
+  }
+
+  public setText(text: string) {
+    (this.renderRoot.querySelector(
+      '#mentionbox'
+    ) as HTMLDivElement).textContent = text;
   }
   protected showFlyout(): void {
     const flyout = this.flyout;
@@ -168,7 +169,6 @@ export class MgtPeopleMention extends MgtPeoplePicker {
       id="mentionbox"
       class="people-selected-input"
       @keyup="${this.onKeyUp}"
-      @selectionchange="${this.onKeyPress}"
       style="width: 500px; padding: 10px"
       placeholder="Start typing a name"
     ></div>`;
@@ -234,7 +234,6 @@ export class MgtPeopleMention extends MgtPeoplePicker {
     var length =
       (this.renderRoot.querySelector('#mentionbox') as HTMLDivElement).innerText
         .length - 1;
-    console.log('childnode', ele.childNodes);
     var rng = document.createRange();
     var sel = window.getSelection();
     rng.setStart(ele.childNodes[ele.childNodes.length - 1], 1);
@@ -245,9 +244,6 @@ export class MgtPeopleMention extends MgtPeoplePicker {
     this.fireCustomEvent('textChanged', mydiv.innerHTML);
   }
 
-  keyUpOnPersonCard() {
-    console.log('Key up');
-  }
   protected hideFlyout(): void {
     const flyout = this.flyout;
     if (flyout) {
