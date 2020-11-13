@@ -69,6 +69,7 @@ export class Information {
 
 @customElement('app-about')
 export class AppAbout extends LitElement {
+  loadingState: boolean = false;
   loggedInUserDisplayName: string = '';
   formInfo: Information;
   newFormInfo: Information;
@@ -270,6 +271,9 @@ export class AppAbout extends LitElement {
   }
 
   async onClickSave() {
+    this.loadingState = true;
+    super.requestUpdate();
+
     const provider = Providers.globalProvider;
     if (provider.state === ProviderState.SignedIn) {
       const userDetails = await Providers.globalProvider.graph.api('/me').get();
@@ -367,6 +371,9 @@ export class AppAbout extends LitElement {
       }
       this.didStatusChange = this.didLeadChange = this.didSeverityChange = this.didAssignedToChange = this.didDescriptionChange = this.didTeamsChannelChange = this.didCommentChange = false;
       this.updateSave();
+      this.loadingState = false;
+      super.requestUpdate();
+
     }
   }
 
@@ -703,7 +710,7 @@ export class AppAbout extends LitElement {
                     </label>
                     <p>
                       <!-- <fast-text-area name="comment" rows="10" cols="30"></fast-text-area> -->
-                      <mgt-people-mention id="comment" name="comment" rows="10" cols="30" placeholder="Leave your comment here..." @textChanged="${(
+                      <mgt-people-mention id="comment" name="comment" @textChanged="${(
                         e
                       ) => this.onCommentChange(e)}"></mgt-people-mention>
                     </p>
@@ -715,8 +722,23 @@ export class AppAbout extends LitElement {
       
             <div class="cta">
               <fast-button>cancel</fast-button>
-              <fast-button id="save" @click="${() =>
-                this.onClickSave()}" disabled class="primary">Save</fast-button>
+              ${​​​​​
+                this.loadingState
+                  ? html`<fast-button
+                      id="save"
+                      @click="${​​​​​() => this.onClickSave()}​​​​​"
+                      disabled
+                      class="primary"
+                      ><mgt-spinner></mgt-spinner
+                    ></fast-button>`
+                  : html`<fast-button
+                      id="save"
+                      @click="${​​​​​() => this.onClickSave()}​​​​​"
+                      disabled
+                      class="primary"
+                      >Save</fast-button
+                    >`
+              }​​​​​
             </div>
           </div>
         </div>

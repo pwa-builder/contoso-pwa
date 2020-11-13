@@ -169,7 +169,7 @@ export class MgtPeopleMention extends MgtPeoplePicker {
       id="mentionbox"
       class="people-selected-input"
       @keyup="${this.onKeyUp}"
-      style="width: 500px; padding: 10px"
+      style="width: auto; height: 130px;"
       placeholder="Start typing a name"
     ></div>`;
     const flyoutTemplate = this.renderFlyout(inputTemplate);
