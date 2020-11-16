@@ -1,10 +1,10 @@
 {
-  "name": "PWA Starter",
+  "name": "Contoso Emergency Response",
   "display": "standalone",
   "start_url": "/",
-  "short_name": "starter",
+  "short_name": "Contoso",
   "theme_color": "#686bd2",
-  "description": "This is a PWA Starter app",
+  "description": "This is a emergency response app that utilizes PWA builder and Microsoft Graph Toolkit",
   "orientation": "any",
   "background_color": "#686bd2",
   "related_applications": [],
@@ -41,6 +41,7 @@
   "features": [
     "Cross Platform",
     "fast",
-    "simple"
+    "simple",
+    "Microsoft Graph"
   ]
 }
