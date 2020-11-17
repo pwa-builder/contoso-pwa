@@ -9,6 +9,7 @@ import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 import '../components/mention/mgt-people-mention';
 import '../components/sidebar';
 import '../components/background-map';
+import '../components/mention/mgt-spinner';
 export enum Status {
   /**
    * Needs Attention = 0
@@ -373,7 +374,6 @@ export class AppAbout extends LitElement {
       this.updateSave();
       this.loadingState = false;
       super.requestUpdate();
-
     }
   }
 
@@ -722,18 +722,18 @@ export class AppAbout extends LitElement {
       
             <div class="cta">
               <fast-button>cancel</fast-button>
-              ${​​​​​
+              ${
                 this.loadingState
                   ? html`<fast-button
                       id="save"
-                      @click="${​​​​​() => this.onClickSave()}​​​​​"
+                      @click="${() => this.onClickSave()}​​​​​"
                       disabled
                       class="primary"
                       ><mgt-spinner></mgt-spinner
                     ></fast-button>`
                   : html`<fast-button
                       id="save"
-                      @click="${​​​​​() => this.onClickSave()}​​​​​"
+                      @click="${() => this.onClickSave()}​​​​​"
                       disabled
                       class="primary"
                       >Save</fast-button
