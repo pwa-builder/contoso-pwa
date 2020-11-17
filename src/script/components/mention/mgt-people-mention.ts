@@ -166,11 +166,17 @@ export class MgtPeopleMention extends MgtPeoplePicker {
 
     const inputTemplate = html`<div
       contenteditable="true"
+      role="textarea"
       id="mentionbox"
       class="people-selected-input"
       @keyup="${this.onKeyUp}"
-      style="width: auto; height: 130px;"
-      placeholder="Start typing a name"
+      style="display: block;
+        overflow: hidden;
+        resize: both;
+        min-height: 20px;
+        line-height: 20px;
+        margin-bottom: -6px;
+        padding: 8px;"
     ></div>`;
     const flyoutTemplate = this.renderFlyout(inputTemplate);
     return html`
