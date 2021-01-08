@@ -33,10 +33,10 @@ export class AppLogin extends LitElement {
             }
 
             mgt-login {
-                --background-color: #0078d4;
-                --background-color--hover: #005a9e;
-                --color: #ffffff;
-                --color-hover: #edebe9;
+                --button-background-color: #0078d4;
+                --button-background-color--hover: #005a9e;
+                --button-color: #ffffff;
+                --button-color-hover: #edebe9;
                 --font-size: 12px;
                 --font-weight: 400;
                 --width: 105px;

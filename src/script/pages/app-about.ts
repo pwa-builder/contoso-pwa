@@ -125,12 +125,13 @@ export class AppAbout extends LitElement {
       select {
         width: 100%;
         height: 38px;
-        border: 1px solid #8a8886;
+        border: 2px solid #605E5C;
       }
 
       textarea {
         width: 97%;
         padding: 0.5em;
+        border: 2px solid #605E5C;
         margin: 0 -2em 0 0;
         font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI',
           -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue',
@@ -203,7 +204,7 @@ export class AppAbout extends LitElement {
         background-color: #ffffff;
         box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.03);
         border-radius: 5px;
-        width: 800px;
+        width: 1000px;
       }
 
       .form {

@@ -29,7 +29,7 @@ export class BackgroundMap extends LitElement {
           language: 'en-US',
           authOptions: {
             authType: 'subscriptionKey',
-            subscriptionKey: 'zr9VA15TqhJbXVvzA8_An6IShYwGCMzc_9VcSXRb-5c'
+            subscriptionKey: 'zqNR0ifvEWlKnY4FPpafqRNr1y3F_XJKCIbe5pd-RmA'
           }
         });  
     }

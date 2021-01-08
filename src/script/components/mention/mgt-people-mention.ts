@@ -8,11 +8,11 @@ import {
   TemplateResult,
 } from 'lit-element';
 import { Providers, ProviderState } from '@microsoft/mgt';
-import { findUsers } from '@microsoft/mgt/dist/es6/graph/graph.user';
+import { findUsers } from '@microsoft/mgt-components/dist/es6/graph/graph.user';
 import {
   PersonType,
   findPeople,
-} from '@microsoft/mgt/dist/es6/graph/graph.people';
+} from '@microsoft/mgt-components/dist/es6/graph/graph.people';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 //import { styles } from './mgt-people-mention-css';
@@ -180,7 +180,7 @@ export class MgtPeopleMention extends MgtPeoplePicker {
     ></div>`;
     const flyoutTemplate = this.renderFlyout(inputTemplate);
     return html`
-      <div class=${classMap(inputClasses)}>
+      <div class=${classMap(inputClasses)} style="padding-top: 0; padding-bottom:6px;">
         <div class="people-selected-list">${flyoutTemplate}</div>
       </div>
     `;
